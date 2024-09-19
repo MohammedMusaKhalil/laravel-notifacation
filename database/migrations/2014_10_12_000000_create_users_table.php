@@ -23,6 +23,7 @@ return new class extends Migration
             $table->string('phone')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->boolean('notifications_disabled')->default(1);
             $table->rememberToken();
             $table->timestamps();
         });

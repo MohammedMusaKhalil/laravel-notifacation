@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\adminControler;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -20,6 +21,8 @@ Route::prefix('admin')->name('admin.')->group(function(){
 Route::middleware(['web', 'isAdmin'])->group(function(){
    // Route::view('/dashbord','admin.dashbord')->name('dashbord');
     Route::get('/dashbord',[adminControler::class,'index'])->name('dashbord');
+    Route::get('/dashbord/send',[adminControler::class,'send'])->name('dashbord.send');
+    Route::post('/notifications/send', [NotificationController::class, 'sendToAllUsers'])->name('notifications.send');
     Route::post('/mark-as-read',[adminControler::class,'markNotification'])->name('markNotification');
 });
 
