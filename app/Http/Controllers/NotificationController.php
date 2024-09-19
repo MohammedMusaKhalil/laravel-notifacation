@@ -69,4 +69,16 @@ public function toggleNotifications(Request $request)
 
         return redirect()->back()->with('success', 'Notification sent to all users successfully!');
     }
+    public function updateNotificationTime(Request $request)
+{
+    $user = auth()->user();
+
+    DB::table('users')->where('id', $user->id)->update([
+        'email_verified_at' => $request->input('email_verified_at'),
+    ]);
+
+
+    return redirect()->back()->with('status', 'Notification time updated successfully.');
+}
+
 }

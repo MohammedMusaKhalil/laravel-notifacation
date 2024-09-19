@@ -9,7 +9,7 @@
         <div class="bg-white shadow-md rounded-lg p-6">
             <h3 class="text-2xl font-semibold text-gray-700 mb-4">Notification Settings</h3>
 
-            <!-- زر تفعيل وإيقاف الإشعارات -->
+            <!-- نموذج لتفعيل/إيقاف الإشعارات -->
             <form id="notification-form" action="{{ route('notifications.toggle') }}" method="POST" class="mb-8">
                 @csrf
                 <div class="flex items-center">
@@ -24,6 +24,25 @@
                         </label>
                     </div>
                 </div>
+            </form>
+
+            <!-- نموذج لتخصيص الوقت -->
+            <form id="notification-time-form" action="{{ route('notifications.updateTime') }}" method="POST" class="mb-8">
+                @csrf
+                <div class="mb-4">
+                    <label for="email_verified_at" class="block text-gray-600 font-medium mb-2">Preferred Time for Notifications</label>
+                    <input type="time" name="email_verified_at" id="email_verified_at"
+                           value="{{ auth()->user()->email_verified_at }}"
+                           class="border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50">
+                           @if (auth()->user()->email_verified_at)
+                                <div class="mt-3"> old time is ({{ auth()->user()->email_verified_at }})</div>
+                           @endif
+
+                </div>
+
+                <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+                    Save Time Settings
+                </button>
             </form>
 
             <h3 class="text-xl font-semibold text-gray-700 mb-4">Your Notifications</h3>
