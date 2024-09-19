@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -10,15 +11,36 @@ use Illuminate\Support\Str;
 class NotificationController extends Controller
 {
     public function index()
-    {   $user = Auth::user();
-        $notifications=null;
-        if(!$user->notifications_disabled){
-        $notifications = DB::table('notificationsuser')
+    {
+        $user = Auth::user();
+        $notifications = null;
+
+        if (!$user->notifications_disabled) {
+            // إذا كان `email_verified_at` فارغًا، عرض الإشعارات فقط بناءً على التاريخ
+            if (is_null($user->email_verified_at)) {
+                $notifications = DB::table('notificationsuser')
+                    ->where('notifiable_id', $user->id)
+                    ->where('read_at', null)
+                    ->where('notification_date', date('Y-m-d'))
+                    ->get();
+            } else {
+                // مقارنة الوقت الحالي مع الوقت المخزن في `email_verified_at` من اجل المنطقة الزمنية
+                $currentTime = Carbon::now(); // الوقت الحالي
+                $newTime = $currentTime->addHours(3); // زيادة 3 ساعات
+                $newTimeString = $newTime->toTimeString(); // تحويل الوقت إلى صيغة HH:MM:SS
+                //dd($newTimeString);
+
+                $storedTime = Carbon::parse($user->email_verified_at)->toTimeString();
+                if ($newTimeString >= $storedTime) {
+                    $notifications = DB::table('notificationsuser')
                         ->where('notifiable_id', $user->id)
                         ->where('read_at', null)
+                        ->where('notification_date', date('Y-m-d'))
                         ->get();
+                }
+            }
+        }
 
-                    }
         return view('notificatin', compact('notifications')); // تمرير الإشعارات إلى العرض
     }
 
@@ -53,7 +75,7 @@ public function toggleNotifications(Request $request)
 
         // الرسالة المرسلة من النموذج
         $message = $request->input('message');
-
+        $notificationDate = $request->input('notification_date');
         // إرسال الرسالة لكل مستخدم
         foreach ($users as $user) {
             DB::table('notificationsuser')->insert([
@@ -62,6 +84,7 @@ public function toggleNotifications(Request $request)
                 'notifiable_id' => $user->id,
                 'notifiable_type' => User::class, // تعيين نوع المستخدم
                 'data' => $message,
+                'notification_date' => $notificationDate,
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);

@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('type')->default('App\\Notifications\\UserRegisterNotification'); // إضافة قيمة افتراضية
             $table->morphs('notifiable');
             $table->text('data');
-            $table->timestamp('notification_date')->useCurrent();
+            $table->date('notification_date');
             $table->timestamp('read_at')->nullable();
             $table->timestamps();
         });

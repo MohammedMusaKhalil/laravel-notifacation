@@ -21,6 +21,10 @@
                                 <label for="message">Notification Message</label>
                                 <textarea name="message" id="message" class="form-control" rows="4" placeholder="Enter your message here"></textarea>
                             </div>
+                            <div class="form-group mb-3">
+                                <label for="notification_date">Notification Date</label>
+                                <input type="date" name="notification_date" id="notification_date" class="form-control" placeholder="Select date">
+                            </div>
                             <button type="submit" class="btn btn-primary">Send to All Users</button>
                         </form>
                     </div>
