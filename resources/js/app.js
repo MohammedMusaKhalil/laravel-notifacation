@@ -11,9 +11,9 @@ Alpine.start();
     * Copyright 2013-2023 Start Bootstrap
     * Licensed under MIT (https://github.com/StartBootstrap/startbootstrap-sb-admin/blob/master/LICENSE)
     */
-    // 
+    //
 // Scripts
-// 
+//
 
 window.addEventListener('DOMContentLoaded', event => {
 
@@ -32,3 +32,11 @@ window.addEventListener('DOMContentLoaded', event => {
     }
 
 });
+const toggleCheckbox = document.getElementById('notification-toggle-checkbox');
+const notificationForm = document.getElementById('notification-form');
+
+toggleCheckbox.addEventListener('change', function() {
+    // إرسال النموذج تلقائيًا عند تغيير حالة زر التبديل
+    notificationForm.submit();
+});
+

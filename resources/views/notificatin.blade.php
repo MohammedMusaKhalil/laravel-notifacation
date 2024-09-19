@@ -8,13 +8,21 @@
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 py-12">
         <div class="bg-white shadow-md rounded-lg p-6">
             <h3 class="text-2xl font-semibold text-gray-700 mb-4">Notification Settings</h3>
-            <form action="{{ route('notifications.toggle') }}" method="POST" class="mb-8">
+
+            <!-- زر تفعيل وإيقاف الإشعارات -->
+            <form id="notification-form" action="{{ route('notifications.toggle') }}" method="POST" class="mb-8">
                 @csrf
                 <div class="flex items-center">
-                    <label for="notifications_disabled" class="text-gray-600 font-medium mr-4">Disable Notifications</label>
-                    <input type="checkbox" name="notifications_disabled" id="notifications_disabled"
-                    {{ auth()->user()->notifications_disabled ? 'checked' : '' }} class="form-checkbox h-5 w-5 text-blue-600">
-                    <button type="submit" class="ml-4 bg-blue-500 text-white px-4 py-2 rounded">Save</button>
+                    <label class="text-gray-600 font-medium mr-4">Disable Notifications</label>
+
+                    <!-- زر التبديل المخصص -->
+                    <div class="notification-toggle">
+                        <input style="display: none" type="checkbox" name="notifications_disabled" id="notification-toggle-checkbox"
+                        {{ auth()->user()->notifications_disabled ? 'checked' : '' }}>
+                        <label for="notification-toggle-checkbox" class="toggle-label">
+                            <span class="toggle-switch"></span>
+                        </label>
+                    </div>
                 </div>
             </form>
 
