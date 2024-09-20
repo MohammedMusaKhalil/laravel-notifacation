@@ -45,7 +45,15 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::get('/auth/redirect',[SocialiteController::class,'redirect']);
-Route::get('/auth/google/callback',[SocialiteController::class,'callback']);
+Route::get('/auth/google',[SocialiteController::class,'redirectgoogle']);
+Route::get('/auth/google/callback',[SocialiteController::class,'callbackgoogle']);
+
+Route::get('/auth/facebook',[SocialiteController::class,'redirectfacebook']);
+Route::get('/auth/facebook/callback',[SocialiteController::class,'callbackfacebook']);
+
+Route::get('/auth/apple',[SocialiteController::class,'redirectapple']);
+Route::get('/auth/apple/callback',[SocialiteController::class,'callbackapple']);
+
+
 require __DIR__.'/auth.php';
 require __DIR__.'/admin.php';

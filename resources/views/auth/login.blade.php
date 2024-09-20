@@ -44,7 +44,13 @@
             </x-primary-button>
         </div>
         <div>
-            <a href="auth/redirect" >Login with Google</a>
+            <a href="auth/google" >Login with Google</a>
+        </div>
+        <div>
+            <a href="auth/facebook" >Login with Facebook</a>
+        </div>
+        <div>
+            <a href="auth/apple" >Login with Apple</a>
         </div>
     </form>
 </x-guest-layout>
