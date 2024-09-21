@@ -20,29 +20,21 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-//normal user routes
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
-
-
-Route::get('/notifications', [NotificationController::class, 'index'])
-    ->middleware(['auth', 'verified'])
-    ->name('dashboard.notification');
-
-Route::post('/notifications/toggle', [NotificationController::class, 'toggleNotifications'])->name('notifications.toggle');
-
-Route::post('/notifications/update-time', [NotificationController::class, 'updateNotificationTime'])->name('notifications.updateTime');
-
-
-Route::post('/notifications/{id}/mark-as-read', [NotificationController::class, 'markAsRead'])->name('notifications.markAsRead');
-
-
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    //normal user routes
+    Route::get('/dashboard', function () {return view('dashboard');})->name('dashboard');
+
+    Route::get('/notifications', [NotificationController::class, 'index'])->name('dashboard.notification');
+
+    Route::post('/notifications/toggle', [NotificationController::class, 'toggleNotifications'])->name('notifications.toggle');
+
+    Route::post('/notifications/update-time', [NotificationController::class, 'updateNotificationTime'])->name('notifications.updateTime');
+
+    Route::post('/notifications/{id}/mark-as-read', [NotificationController::class, 'markAsRead'])->name('notifications.markAsRead');
 });
 
 Route::get('/auth/google',[SocialiteController::class,'redirectgoogle']);

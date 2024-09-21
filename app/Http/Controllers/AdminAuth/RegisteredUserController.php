@@ -11,6 +11,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
 
@@ -48,5 +49,29 @@ class RegisteredUserController extends Controller
         Auth::login($admin);
 
         return redirect()->route('admin.dashbord');
+    }
+
+    public function storeapi(Request $request): JsonResponse
+    {
+        $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:'.Admin::class],
+            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+        ]);
+
+        $admin = Admin::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+        ]);
+
+        event(new Registered($admin));
+
+        Auth::login($admin);
+
+        return response()->json([
+            'message' => 'Admin registered successfully.',
+            'admin' => $admin
+        ], 201); // 201 Created
     }
 }

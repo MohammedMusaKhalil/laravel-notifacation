@@ -8,6 +8,8 @@ use App\Providers\RouteServiceProvider;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\JsonResponse;
+
 use Illuminate\View\View;
 
 class AuthenticatedSessionController extends Controller
@@ -44,5 +46,29 @@ class AuthenticatedSessionController extends Controller
         $request->session()->regenerateToken();
 
         return redirect()->route('admin.login');
+    }
+
+
+    public function storeapi(LoginRequest $request): JsonResponse
+    {
+        $request->authenticate('admin');
+
+        // تسجيل دخول المسؤول
+        Auth::guard('admin')->login($request->user());
+
+        return response()->json([
+            'message' => 'Admin logged in successfully.',
+            'admin' => Auth::guard('admin')->user(),
+        ]);
+    }
+
+    /**
+     * Destroy an authenticated session.
+     */
+    public function destroyapi(Request $request): JsonResponse
+    {
+        Auth::guard('admin')->logout();
+
+        return response()->json(['message' => 'Admin logged out successfully.']);
     }
 }

@@ -7,6 +7,8 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Password;
 use Illuminate\View\View;
+use Illuminate\Http\JsonResponse;
+
 
 class PasswordResetLinkController extends Controller
 {
@@ -40,5 +42,22 @@ class PasswordResetLinkController extends Controller
                     ? back()->with('status', __($status))
                     : back()->withInput($request->only('email'))
                             ->withErrors(['email' => __($status)]);
+    }
+    public function storeapi(Request $request): JsonResponse
+    {
+        $request->validate([
+            'email' => ['required', 'email'],
+        ]);
+
+        // إرسال رابط إعادة تعيين كلمة المرور.
+        $status = Password::sendResetLink(
+            $request->only('email')
+        );
+
+        if ($status == Password::RESET_LINK_SENT) {
+            return response()->json(['status' => __('passwords.sent')], 200); // 200 OK
+        }
+
+        return response()->json(['error' => trans($status)], 422); // 422 Unprocessable Entity
     }
 }

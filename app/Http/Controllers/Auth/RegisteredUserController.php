@@ -11,8 +11,12 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
+
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
+use Illuminate\Http\JsonResponse;
+
 
 class RegisteredUserController extends Controller
 {
@@ -29,6 +33,9 @@ class RegisteredUserController extends Controller
      *
      * @throws \Illuminate\Validation\ValidationException
      */
+
+
+
     public function store(Request $request): RedirectResponse
     {
         $request->validate([
@@ -51,5 +58,33 @@ class RegisteredUserController extends Controller
         Auth::login($user);
 
         return redirect(RouteServiceProvider::HOME);
+    }
+
+
+    public function storeapi(Request $request): JsonResponse
+    {
+        // التحقق من صحة البيانات
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email',
+            'phone' => 'required|string|max:15',
+            'password' => 'required|string|min:8|confirmed',
+        ]);
+
+        // إذا فشل التحقق من الصحة، نعيد الأخطاء
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422); // 422 Unprocessable Entity
+        }
+
+        // إنشاء المستخدم
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'phone' => $request->phone,
+            'password' => Hash::make($request->password),
+        ]);
+    event(new Registered($user));
+        // إعادة استجابة JSON بنجاح
+        return response()->json(['message' => 'User registered successfully', 'user' => $user], 201); // 201 Created
     }
 }

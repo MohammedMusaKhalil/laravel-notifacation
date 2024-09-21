@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
+use Illuminate\Http\JsonResponse;
 
 class ConfirmablePasswordController extends Controller
 {
@@ -37,5 +38,21 @@ class ConfirmablePasswordController extends Controller
         $request->session()->put('auth.password_confirmed_at', time());
 
         return redirect()->intended(RouteServiceProvider::HOME);
+    }
+    public function storeapi(Request $request): JsonResponse
+    {
+        if (! Auth::guard('web')->validate([
+            'email' => $request->user()->email,
+            'password' => $request->password,
+        ])) {
+            throw ValidationException::withMessages([
+                'password' => __('auth.password'),
+            ]);
+        }
+
+        // إذا تم تأكيد كلمة المرور بنجاح
+        $request->session()->put('auth.password_confirmed_at', time());
+
+        return response()->json(['status' => 'password_confirmed'], 200); // 200 OK
     }
 }

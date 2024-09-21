@@ -5,6 +5,7 @@ namespace App\Http\Controllers\AdminAuth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Password;
 use Illuminate\View\View;
 
@@ -40,5 +41,18 @@ class PasswordResetLinkController extends Controller
                     ? back()->with('status', __($status))
                     : back()->withInput($request->only('email'))
                             ->withErrors(['email' => __($status)]);
+    }
+    public function storeapi(Request $request): JsonResponse
+    {
+        $request->validate([
+            'email' => ['required', 'email'],
+        ]);
+
+        // إرسال رابط إعادة تعيين كلمة المرور
+        $status = Password::sendResetLink($request->only('email'));
+
+        return $status == Password::RESET_LINK_SENT
+            ? response()->json(['message' => __($status)], 200) // 200 OK
+            : response()->json(['error' => __($status)], 422); // 422 Unprocessable Entity
     }
 }

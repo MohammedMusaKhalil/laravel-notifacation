@@ -9,6 +9,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
+use Illuminate\Http\JsonResponse;
 
 class AuthenticatedSessionController extends Controller
 {
@@ -44,5 +45,23 @@ class AuthenticatedSessionController extends Controller
         $request->session()->regenerateToken();
 
         return redirect('/');
+    }
+    public function storeapi(LoginRequest $request): JsonResponse
+    {
+        $request->authenticate();
+        return response()->json(['status' => 'logged_in'], 200); // 200 OK
+    }
+
+    /**
+     * Destroy an authenticated session.
+     */
+    public function destroyapi(Request $request): JsonResponse
+    {
+        Auth::guard('web')->logout();
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return response()->json(['status' => 'logged_out'], 200); // 200 OK
     }
 }

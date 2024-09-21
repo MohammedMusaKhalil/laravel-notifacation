@@ -20,6 +20,12 @@ class ProfileController extends Controller
             'user' => $request->user(),
         ]);
     }
+    public function editapi(Request $request)
+    {
+        return response()->json([
+            'user' => $request->user(),
+        ]);
+    }
 
     /**
      * Update the user's profile information.
@@ -36,6 +42,23 @@ class ProfileController extends Controller
 
         return Redirect::route('profile.edit')->with('status', 'profile-updated');
     }
+
+    public function updateapi(ProfileUpdateRequest $request)
+{
+    $request->user()->fill($request->validated());
+
+    if ($request->user()->isDirty('email')) {
+        $request->user()->email_verified_at = null;
+    }
+
+    $request->user()->save();
+
+    return response()->json([
+        'status' => 'profile-updated',
+        'user' => $request->user(),
+    ]);
+}
+
 
     /**
      * Delete the user's account.
@@ -57,4 +80,24 @@ class ProfileController extends Controller
 
         return Redirect::to('/');
     }
+
+    public function destroyapi(Request $request)
+{
+    $request->validateWithBag('userDeletion', [
+        'password' => ['required', 'current_password'],
+    ]);
+
+    $user = $request->user();
+
+    Auth::logout();
+
+    $user->delete();
+
+    $request->session()->invalidate();
+    $request->session()->regenerateToken();
+
+    return response()->json([
+        'status' => 'account-deleted',
+    ]);
+}
 }

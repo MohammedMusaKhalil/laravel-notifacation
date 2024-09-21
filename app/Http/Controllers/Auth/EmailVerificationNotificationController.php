@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 
 class EmailVerificationNotificationController extends Controller
 {
@@ -21,5 +22,15 @@ class EmailVerificationNotificationController extends Controller
         $request->user()->sendEmailVerificationNotification();
 
         return back()->with('status', 'verification-link-sent');
+    }
+    public function storeapi(Request $request): JsonResponse
+    {
+        if ($request->user()->hasVerifiedEmail()) {
+            return response()->json(['status' => 'already_verified'], 200); // 200 OK
+        }
+
+        $request->user()->sendEmailVerificationNotification();
+
+        return response()->json(['status' => 'verification-link-sent'], 200); // 200 OK
     }
 }
