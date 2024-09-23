@@ -41,5 +41,5 @@ Route::middleware('auth:admin')->group(function () {
 
     Route::post('confirm-password', [ConfirmablePasswordController::class, 'storeapi'])->name('password.confirm');
     Route::put('password', [PasswordController::class, 'updateapi'])->name('password.update');
-    Route::post('logout', [AuthenticatedSessionController::class, 'destroyapi'])->name('logout');
+    Route::post('admin_logout', [AuthenticatedSessionController::class, 'destroyapi'])->name('logout');
 });

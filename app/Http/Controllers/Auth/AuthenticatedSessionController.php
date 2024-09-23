@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 use Illuminate\Http\JsonResponse;
+use Laravel\Sanctum\HasApiTokens;
 
 class AuthenticatedSessionController extends Controller
 {
@@ -48,8 +49,18 @@ class AuthenticatedSessionController extends Controller
     }
     public function storeapi(LoginRequest $request): JsonResponse
     {
+        // Authenticate the user
         $request->authenticate();
-        return response()->json(['status' => 'logged_in'], 200); // 200 OK
+
+        // Generate the token
+        $user = Auth::user();
+        $token = $user->createToken('API Token')->plainTextToken;
+
+        // Return the token in the response
+        return response()->json([
+            'status' => 'logged_in',
+            'token' => $token
+        ], 200);
     }
 
     /**

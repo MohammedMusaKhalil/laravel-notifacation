@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Validation\Rules;
+use Illuminate\Support\Facades\Validator;
+
 use Illuminate\View\View;
 
 class RegisteredUserController extends Controller
@@ -53,25 +55,27 @@ class RegisteredUserController extends Controller
 
     public function storeapi(Request $request): JsonResponse
     {
-        $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:'.Admin::class],
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+        // التحقق من صحة البيانات
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required|string|min:8|confirmed',
         ]);
 
+        // إذا فشل التحقق من الصحة، نعيد الأخطاء
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422); // 422 Unprocessable Entity
+        }
+
+        // إنشاء المستخدم
         $admin = Admin::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
-
         event(new Registered($admin));
+        // إعادة استجابة JSON بنجاح
+        return response()->json(['message' => 'Admin registered successfully', 'Admin' => $admin], 201); // 201 Created
 
-        Auth::login($admin);
-
-        return response()->json([
-            'message' => 'Admin registered successfully.',
-            'admin' => $admin
-        ], 201); // 201 Created
     }
 }

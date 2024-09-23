@@ -50,15 +50,16 @@ class AuthenticatedSessionController extends Controller
 
 
     public function storeapi(LoginRequest $request): JsonResponse
-    {
-        $request->authenticate('admin');
+    { $request->authenticate('admin');
 
-        // تسجيل دخول المسؤول
-        Auth::guard('admin')->login($request->user());
-
+        $admin = Auth::guard('admin')->user();
+        $token = $admin->createToken('AdminToken')->plainTextToken;
+        $lang=config('app.locale');
         return response()->json([
             'message' => 'Admin logged in successfully.',
-            'admin' => Auth::guard('admin')->user(),
+            'admin' => $admin,
+            'token' => $token,
+            'lang'=>$lang,
         ]);
     }
 

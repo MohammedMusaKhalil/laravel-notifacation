@@ -19,8 +19,12 @@ use App\Http\Controllers\adminControler;
 */
 
 // test
-Route::get('/',function(){
-    return 1;
+Route::get('/', function(Request $request) {
+    // استخراج جميع الباراميترز الموجودة في الطلب
+    $params = $request->header('lang');
+
+    // إرجاع الباراميترز كـ JSON للعرض
+    return $params;
 });
 
 // Public routes

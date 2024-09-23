@@ -12,6 +12,7 @@ return [
     | نسخ مثل قواعد الحجم. لا تتردد في تعديل كل رسالة هنا.
     |
     */
+    'successfully'=>'نجاح :attribute',
     'status'=>'الحالة :attribute',
     'accepted' => 'يجب قبول :attribute.',
     'accepted_if' => 'يجب قبول :attribute عندما يكون :other هو :value.',
