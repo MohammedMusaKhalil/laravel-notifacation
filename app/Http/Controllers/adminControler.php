@@ -28,15 +28,19 @@ class adminControler extends Controller
 
 
     public function indexapi()
-    {
-        $admin = Admin::find(1); // يمكن تعديل 1 ليكون هوية المسؤول المسجل حاليًا
+{
+
+    // الحصول على المسؤول المسجل حاليًا
+    $admin = Admin::find(1);
         $notifications = $admin->unreadNotifications;
 
         return response()->json([
             'status' => 'success',
             'notifications' => $notifications,
         ]);
-    }
+
+}
+
 
     // تعيين الإشعارات كـ "مقروءة"
     public function markNotificationapi(Request $request)

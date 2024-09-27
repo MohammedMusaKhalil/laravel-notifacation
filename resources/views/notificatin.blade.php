@@ -7,73 +7,65 @@
 
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 py-12">
         <div class="bg-white shadow-md rounded-lg p-6">
-            <h3 class="text-2xl font-semibold text-gray-700 mb-4">Notification Settings</h3>
+            <h3 class="text-2xl font-semibold text-gray-700 mb-4">Your Notifications</h3>
 
-            <!-- نموذج لتفعيل/إيقاف الإشعارات -->
-            <form id="notification-form" action="{{ route('notifications.toggle') }}" method="POST" class="mb-8">
-                @csrf
-                <div class="flex items-center">
-                    <label class="text-gray-600 font-medium mr-4">Disable Notifications</label>
-
-                    <!-- زر التبديل المخصص -->
-                    <div class="notification-toggle">
-                        <input style="display: none" type="checkbox" name="notifications_disabled" id="notification-toggle-checkbox"
-                        {{ auth()->user()->notifications_disabled ? 'checked' : '' }}>
-                        <label for="notification-toggle-checkbox" class="toggle-label">
-                            <span class="toggle-switch"></span>
-                        </label>
-                    </div>
-                </div>
-            </form>
-
-            <!-- نموذج لتخصيص الوقت -->
-            <form id="notification-time-form" action="{{ route('notifications.updateTime') }}" method="POST" class="mb-8">
-                @csrf
-                <div class="mb-4">
-                    <label for="email_verified_at" class="block text-gray-600 font-medium mb-2">Preferred Time for Notifications</label>
-                    <input type="time" name="email_verified_at" id="email_verified_at"
-                           value="{{ auth()->user()->email_verified_at }}"
-                           class="border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50">
-                           @if (auth()->user()->email_verified_at)
-                                <div class="mt-3"> old time is ({{ auth()->user()->email_verified_at }})</div>
-                           @endif
-
-                </div>
-
-                <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
-                    Save Time Settings
-                </button>
-            </form>
-
-            <h3 class="text-xl font-semibold text-gray-700 mb-4">Your Notifications</h3>
-
-            @forelse ($notifications ?? [] as $notification)
-            <div class="notification bg-gray-100 border-l-4 border-blue-500 shadow-sm rounded-lg mb-6 p-5">
-                <div class="flex justify-between items-center">
-                    <div>
-                        <p class="text-gray-800">{{ $notification->data }}</p>
-                        <small class="text-gray-500">{{ $notification->created_at }}</small>
-                    </div>
-
-                    <div class="flex items-center">
-                        @if (is_null($notification->read_at))
-                            <form action="{{ route('notifications.markAsRead', $notification->id) }}" method="POST">
-                                @csrf
-                                <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
-                                    Mark as Read
-                                </button>
-                            </form>
-                        @else
-                            <span class="text-green-500 font-semibold">Read</span>
-                        @endif
-                    </div>
-                </div>
+            <div id="notifications-list">
+                <!-- سيتم تحديث الإشعارات هنا -->
             </div>
-            @empty
-            <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded-lg" role="alert">
-                <p>No notifications available.</p>
-            </div>
-            @endforelse
         </div>
     </div>
+
+    <script>
+        // استدعاء الإشعارات من خلال الـ API وتحديث قائمة الإشعارات
+        function fetchNotifications() {
+            fetch('/api/notifications')
+                .then(response => response.json())
+                .then(data => {
+                    let notificationsList = document.getElementById('notifications-list');
+
+                    // تحقق من وجود العنصر
+                    if (!notificationsList) {
+                        console.error('Element with id "notifications-list" not found.');
+                        return;
+                    }
+
+                    notificationsList.innerHTML = '';
+
+                    // إذا كانت البيانات موجودة
+                    if (data.length > 0) {
+                        data.forEach(notification => {
+                            let notificationItem = `
+                                <div class="notification bg-gray-100 border-l-4 border-blue-500 shadow-sm rounded-lg mb-6 p-5">
+                                    <div class="flex justify-between items-center">
+                                        <div>
+                                            <p class="text-gray-800">${notification.data}</p>
+                                            <small class="text-gray-500">${notification.created_at}</small>
+                                        </div>
+                                        <div class="flex items-center">
+                                            ${notification.read_at === null ? `
+                                                <form action="/notifications/markAsRead/${notification.id}" method="POST">
+                                                    @csrf
+                                                    <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
+                                                        Mark as Read
+                                                    </button>
+                                                </form>
+                                            ` : '<span class="text-green-500 font-semibold">Read</span>'}
+                                        </div>
+                                    </div>
+                                </div>`;
+                            notificationsList.innerHTML += notificationItem;
+                        });
+                    } else {
+                        notificationsList.innerHTML = '<div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded-lg" role="alert"><p>No notifications available.</p></div>';
+                    }
+                })
+                .catch(error => console.error('Error fetching notifications:', error));
+        }
+
+        // عند تحميل DOM بالكامل
+        document.addEventListener('DOMContentLoaded', function() {
+            fetchNotifications();
+            setInterval(fetchNotifications, 5000); // تحديث كل 5 ثواني
+        });
+    </script>
 </x-app-layout>

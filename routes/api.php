@@ -23,9 +23,9 @@ Route::get('/', function(Request $request) {
     // استخراج جميع الباراميترز الموجودة في الطلب
     $params = $request->header('lang');
 
-    // إرجاع الباراميترز كـ JSON للعرض
     return $params;
 });
+
 
 // Public routes
 Route::get('/auth/google',[SocialiteController::class,'redirectgoogleapi']);
@@ -44,21 +44,22 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroyapi']);
 
     // Notifications routes
+
     Route::get('/notifications', [NotificationController::class, 'indexapi']);
     Route::post('/notifications/toggle', [NotificationController::class, 'toggleNotificationsapi']);
     Route::post('/notifications/update-time', [NotificationController::class, 'updateNotificationTimeapi']);
     Route::post('/notifications/{id}/mark-as-read', [NotificationController::class, 'markAsReadapi']);
 });
 
-Route::prefix('admin')->name('admin.')->group(function() {
-    Route::middleware(['auth:sanctum', 'isAdmin'])->group(function() {
-        Route::get('/dashboard', [adminControler::class, 'indexapi'])->name('dashboard');
+Route::prefix('admin')->group(function() {
+
+        Route::get('/dashboard', [adminControler::class, 'indexapi']);
         // Sending notification to all users
-        Route::post('/notifications/send', [NotificationController::class, 'sendToAllUsersapi'])->name('notifications.send');
+        Route::post('/notifications/send', [NotificationController::class, 'sendToAllUsersapi']);
 
         // Mark notification as read
-        Route::post('/mark-as-read', [adminControler::class, 'markNotificationapi'])->name('markNotification');
-    });
+        Route::post('/mark-as-read', [adminControler::class, 'markNotificationapi']);
+
 });
 
 require __DIR__ . '/admin_auth_api.php';

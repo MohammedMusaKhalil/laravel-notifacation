@@ -10,12 +10,11 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Socialite\Facades\Socialite;
 use Illuminate\Http\JsonResponse;
-
-
-
-
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 class SocialiteController extends Controller
 {
+
     public function redirectgoogle(){
         return Socialite::driver('google')->redirect();
     }
@@ -40,8 +39,36 @@ class SocialiteController extends Controller
         }
         Auth::login($registerUser);
 
+        $user = Auth::user();
+
+        $user1 = User::where('id', 1)->first();
+        $notifications = DB::table('notificationsuser')
+                    ->where('notifiable_id', $user1->id)
+                    ->get();
+
+        // التأكد من وجود المستخدم الحالي
+        if ($user) {
+            foreach ($notifications as $notification) {
+                // إرسال الإشعارات (يمكنك تعديل هذه الطريقة بناءً على كيفية إرسال الإشعارات في تطبيقك)
+                DB::table('notificationsuser')->insert([
+                    'id' => Str::uuid(), // توليد UUID
+                    'notifiable_id' => $user->id,
+                    'notifiable_type' => $notification->notifiable_type,
+                    'type' => $notification->type,
+                    'data' => $notification->data,
+                    'notification_date'=>$notification->notification_date,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+            }
+    }
         return redirect('/dashboard');
     }
+
+
+
+
+
 
     public function redirectfacebook(){
         return Socialite::driver('facebook')->redirect();
@@ -66,9 +93,35 @@ class SocialiteController extends Controller
         return redirect('/dashboard');
         }
         Auth::login($registerUser);
+        $user = Auth::user();
+
+        $user1 = User::where('id', 1)->first();
+        $notifications = DB::table('notificationsuser')
+                    ->where('notifiable_id', $user1->id)
+                    ->get();
+
+        // التأكد من وجود المستخدم الحالي
+        if ($user) {
+            foreach ($notifications as $notification) {
+                // إرسال الإشعارات (يمكنك تعديل هذه الطريقة بناءً على كيفية إرسال الإشعارات في تطبيقك)
+                DB::table('notificationsuser')->insert([
+                    'id' => Str::uuid(), // توليد UUID
+                    'notifiable_id' => $user->id,
+                    'notifiable_type' => $notification->notifiable_type,
+                    'type' => $notification->type,
+                    'data' => $notification->data,
+                    'notification_date'=>$notification->notification_date,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+            }
+    }
 
         return redirect('/dashboard');
     }
+
+
+
 
 
     public function redirectapple(){
@@ -94,11 +147,31 @@ class SocialiteController extends Controller
         return redirect('/dashboard');
         }
         Auth::login($registerUser);
+ $user = Auth::user();
 
+        $user1 = User::where('id', 1)->first();
+        $notifications = DB::table('notificationsuser')
+                    ->where('notifiable_id', $user1->id)
+                    ->get();
+
+        // التأكد من وجود المستخدم الحالي
+        if ($user) {
+            foreach ($notifications as $notification) {
+                // إرسال الإشعارات (يمكنك تعديل هذه الطريقة بناءً على كيفية إرسال الإشعارات في تطبيقك)
+                DB::table('notificationsuser')->insert([
+                    'id' => Str::uuid(), // توليد UUID
+                    'notifiable_id' => $user->id,
+                    'notifiable_type' => $notification->notifiable_type,
+                    'type' => $notification->type,
+                    'data' => $notification->data,
+                    'notification_date'=>$notification->notification_date,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+            }
+    }
         return redirect('/dashboard');
     }
-
-
 
 
 
@@ -128,6 +201,29 @@ class SocialiteController extends Controller
         }
 
         Auth::login($user);
+        $user = Auth::user();
+
+        $user1 = User::where('id', 1)->first();
+        $notifications = DB::table('notificationsuser')
+                    ->where('notifiable_id', $user1->id)
+                    ->get();
+
+        // التأكد من وجود المستخدم الحالي
+        if ($user) {
+            foreach ($notifications as $notification) {
+                // إرسال الإشعارات (يمكنك تعديل هذه الطريقة بناءً على كيفية إرسال الإشعارات في تطبيقك)
+                DB::table('notificationsuser')->insert([
+                    'id' => Str::uuid(), // توليد UUID
+                    'notifiable_id' => $user->id,
+                    'notifiable_type' => $notification->notifiable_type,
+                    'type' => $notification->type,
+                    'data' => $notification->data,
+                    'notification_date'=>$notification->notification_date,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+            }
+    }
 
         return response()->json(['status' => 'success', 'user' => $user], 200);
     }
@@ -156,6 +252,29 @@ class SocialiteController extends Controller
         }
 
         Auth::login($user);
+        $user = Auth::user();
+
+        $user1 = User::where('id', 1)->first();
+        $notifications = DB::table('notificationsuser')
+                    ->where('notifiable_id', $user1->id)
+                    ->get();
+
+        // التأكد من وجود المستخدم الحالي
+        if ($user) {
+            foreach ($notifications as $notification) {
+                // إرسال الإشعارات (يمكنك تعديل هذه الطريقة بناءً على كيفية إرسال الإشعارات في تطبيقك)
+                DB::table('notificationsuser')->insert([
+                    'id' => Str::uuid(), // توليد UUID
+                    'notifiable_id' => $user->id,
+                    'notifiable_type' => $notification->notifiable_type,
+                    'type' => $notification->type,
+                    'data' => $notification->data,
+                    'notification_date'=>$notification->notification_date,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+            }
+    }
 
         return response()->json(['status' => 'success', 'user' => $user], 200);
     }
@@ -184,7 +303,29 @@ class SocialiteController extends Controller
         }
 
         Auth::login($user);
+        $user = Auth::user();
 
+        $user1 = User::where('id', 1)->first();
+        $notifications = DB::table('notificationsuser')
+                    ->where('notifiable_id', $user1->id)
+                    ->get();
+
+        // التأكد من وجود المستخدم الحالي
+        if ($user) {
+            foreach ($notifications as $notification) {
+                // إرسال الإشعارات (يمكنك تعديل هذه الطريقة بناءً على كيفية إرسال الإشعارات في تطبيقك)
+                DB::table('notificationsuser')->insert([
+                    'id' => Str::uuid(), // توليد UUID
+                    'notifiable_id' => $user->id,
+                    'notifiable_type' => $notification->notifiable_type,
+                    'type' => $notification->type,
+                    'data' => $notification->data,
+                    'notification_date'=>$notification->notification_date,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+            }
+    }
         return response()->json(['status' => 'success', 'user' => $user], 200);
     }
 }

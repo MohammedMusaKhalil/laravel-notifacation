@@ -24,10 +24,10 @@ class NotificationController extends Controller
                         ->where('notification_date', date('Y-m-d'))
                         ->get();
                 } else {
-                    // مقارنة الوقت الحالي مع الوقت المخزن في `email_verified_at` من اجل المنطقة الزمنية
-                    $currentTime = Carbon::now(); // الوقت الحالي
-                    $newTime = $currentTime->addHours(3); // زيادة 3 ساعات
-                    $newTimeString = $newTime->toTimeString(); // تحويل الوقت إلى صيغة HH:MM:SS
+
+                    $currentTime = Carbon::now();
+                    $newTime = $currentTime->addHours(3);
+                    $newTimeString = $newTime->toTimeString();
                     //dd($newTimeString);
 
                     $storedTime = Carbon::parse($user->email_verified_at)->toTimeString();
