@@ -5,7 +5,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\WhatsappController;
-
+use Illuminate\Http\Request;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -32,6 +32,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard', function () {return view('dashboard');})->name('dashboard');
 
     Route::get('/notifications', [NotificationController::class, 'index'])->name('dashboard.notification');
+    // تخزين المنطقة الزمنية في الجلسة
+    Route::post('/set-timezone', function (Request $request) {
+        session(['timezone' => $request->timezone]);
+        return response()->json(['status' => 'Timezone set']);
+    })->name('set.timezone');
 
     Route::post('/notifications/toggle', [NotificationController::class, 'toggleNotifications'])->name('notifications.toggle');
 

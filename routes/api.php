@@ -46,6 +46,12 @@ Route::middleware('auth:sanctum')->group(function () {
     // Notifications routes
 
     Route::get('/notifications', [NotificationController::class, 'indexapi']);
+     // تخزين المنطقة الزمنية في الجلسة
+     Route::post('/set-timezone', function (Request $request) {
+        session(['timezone' => $request->timezone]);
+        return response()->json(['status' => 'Timezone set']);
+    });
+
     Route::post('/notifications/toggle', [NotificationController::class, 'toggleNotificationsapi']);
     Route::post('/notifications/update-time', [NotificationController::class, 'updateNotificationTimeapi']);
     Route::post('/notifications/{id}/mark-as-read', [NotificationController::class, 'markAsReadapi']);

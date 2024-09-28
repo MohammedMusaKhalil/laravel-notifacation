@@ -10,39 +10,41 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 class NotificationController extends Controller
 {
-        public function index()
-        {
-            $user = Auth::user();
-            $notifications = null;
+    public function index()
+    {
+        $user = Auth::user();
+        $notifications = null;
 
-            if (!$user->notifications_disabled) {
-                // إذا كان `email_verified_at` فارغًا، عرض الإشعارات فقط بناءً على التاريخ
-                if (is_null($user->email_verified_at)) {
+        // جلب المنطقة الزمنية المخزنة في الجلسة أو اعتماد المنطقة الزمنية الافتراضية
+        $userTimezone = session('timezone', config('app.timezone'));
+
+        if (!$user->notifications_disabled) {
+            // إذا كان `email_verified_at` فارغًا، عرض الإشعارات فقط بناءً على التاريخ
+            if (is_null($user->email_verified_at)) {
+                $notifications = DB::table('notificationsuser')
+                    ->where('notifiable_id', $user->id)
+                    ->where('read_at', null)
+                    ->whereDate('notification_date', Carbon::today($userTimezone)) // استخدام المنطقة الزمنية
+                    ->get();
+            } else {
+                // استخدم الوقت الحالي بناءً على المنطقة الزمنية للمستخدم
+                $currentTime = Carbon::now($userTimezone);
+                $currentTimeString = $currentTime->toTimeString();
+
+                $storedTime = Carbon::parse($user->email_verified_at, $userTimezone)->toTimeString();
+                if ($currentTimeString >= $storedTime) {
                     $notifications = DB::table('notificationsuser')
                         ->where('notifiable_id', $user->id)
                         ->where('read_at', null)
-                        ->where('notification_date', date('Y-m-d'))
+                        ->whereDate('notification_date', Carbon::today($userTimezone)) // استخدام المنطقة الزمنية
                         ->get();
-                } else {
-
-                    $currentTime = Carbon::now();
-                    $newTime = $currentTime->addHours(3);
-                    $newTimeString = $newTime->toTimeString();
-                    //dd($newTimeString);
-
-                    $storedTime = Carbon::parse($user->email_verified_at)->toTimeString();
-                    if ($newTimeString >= $storedTime) {
-                        $notifications = DB::table('notificationsuser')
-                            ->where('notifiable_id', $user->id)
-                            ->where('read_at', null)
-                            ->where('notification_date', date('Y-m-d'))
-                            ->get();
-                    }
                 }
             }
-
-            return view('notificatin', compact('notifications')); // تمرير الإشعارات إلى العرض
         }
+
+        return view('notificatin', compact('notifications')); // تمرير الإشعارات إلى العرض
+    }
+
 
         public function markAsRead($id)
     {
@@ -111,36 +113,37 @@ class NotificationController extends Controller
     public function indexapi()
     {
         $user = Auth::user();
-        $notifications = [];
+        $notifications = null;
+
+        // جلب المنطقة الزمنية المخزنة في الجلسة أو اعتماد المنطقة الزمنية الافتراضية
+        $userTimezone = session('timezone', config('app.timezone'));
 
         if (!$user->notifications_disabled) {
-            // إذا كان `email_verified_at` فارغًا، عرض الإشعارات بناءً على التاريخ
+            // إذا كان `email_verified_at` فارغًا، عرض الإشعارات فقط بناءً على التاريخ
             if (is_null($user->email_verified_at)) {
                 $notifications = DB::table('notificationsuser')
                     ->where('notifiable_id', $user->id)
-                    ->whereNull('read_at')
-                    ->where('notification_date', date('Y-m-d'))
+                    ->where('read_at', null)
+                    ->whereDate('notification_date', Carbon::today($userTimezone)) // استخدام المنطقة الزمنية
                     ->get();
             } else {
-                // مقارنة الوقت الحالي مع الوقت المخزن في `email_verified_at`
-                $currentTime = Carbon::now();
-                $newTime = $currentTime->addHours(3);
-                $newTimeString = $newTime->toTimeString();
+                // استخدم الوقت الحالي بناءً على المنطقة الزمنية للمستخدم
+                $currentTime = Carbon::now($userTimezone);
+                $currentTimeString = $currentTime->toTimeString();
 
-                $storedTime = Carbon::parse($user->email_verified_at)->toTimeString();
-                if ($newTimeString >= $storedTime) {
+                $storedTime = Carbon::parse($user->email_verified_at, $userTimezone)->toTimeString();
+                if ($currentTimeString >= $storedTime) {
                     $notifications = DB::table('notificationsuser')
                         ->where('notifiable_id', $user->id)
-                        ->whereNull('read_at')
-                        ->where('notification_date', date('Y-m-d'))
+                        ->where('read_at', null)
+                        ->whereDate('notification_date', Carbon::today($userTimezone)) // استخدام المنطقة الزمنية
                         ->get();
                 }
             }
         }
 
-        // إرجاع البيانات كـ JSON
         return response()->json($notifications);
-    }
+     }
 
     // تعيين الإشعار كـ "مقروء"
     public function markAsReadapi($id)

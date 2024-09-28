@@ -16,6 +16,23 @@
     </div>
 
     <script>
+         // تحديد المنطقة الزمنية للمستخدم من المتصفح
+         var timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+        // إرسال المنطقة الزمنية إلى الخادم عبر AJAX
+        fetch('{{ route('set.timezone') }}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            },
+            body: JSON.stringify({ timezone: timezone })
+        }).then(response => response.json())
+        .then(data => {
+            console.log('Timezone set successfully:', data);
+        }).catch(error => {
+            console.error('Error setting timezone:', error);
+        });
         // استدعاء الإشعارات من خلال الـ API وتحديث قائمة الإشعارات
         function fetchNotifications() {
             fetch('/api/notifications')
