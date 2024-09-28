@@ -60,7 +60,7 @@
                                         </div>
                                         <div class="flex items-center">
                                             ${notification.read_at === null ? `
-                                                <form action="/notifications/markAsRead/${notification.id}" method="POST">
+                                                <form action="/notifications/${notification.id}/mark-as-read" method="POST">
                                                     @csrf
                                                     <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
                                                         Mark as Read
