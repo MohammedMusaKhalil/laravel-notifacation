@@ -8,7 +8,7 @@
             <li class="breadcrumb-item active">Send - Notification</li>
         </ol>
         <div class="row">
-            <div class="col-xl-6">
+            <div class="col-xl-14">
                 <div class="card mb-4">
                     <div class="card-header">
                         <i class="fas fa-bell me-1"></i>
