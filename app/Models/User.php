@@ -24,6 +24,7 @@ class User extends Authenticatable
         'password',
         'email_verified_at',
         'notifications_disabled',
+        'notifications_in_watsapp',
         'google_id',
         'google_token',
         'google_refresh_token',

@@ -24,6 +24,7 @@ return new class extends Migration
             $table->time('email_verified_at')->nullable();
             $table->string('password');
             $table->boolean('notifications_disabled')->default(1);
+            $table->boolean('notifications_in_watsapp')->default(0);
             $table->rememberToken();
             $table->timestamps();
         });

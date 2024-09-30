@@ -22,7 +22,7 @@ Route::get('/', function () {
 });
 
 Route::get('/wa', [WhatsappController::class, 'index']);
-Route::post('whatsapp', [WhatsAppController::class, 'store']);
+
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -39,6 +39,10 @@ Route::middleware('auth')->group(function () {
     })->name('set.timezone');
 
     Route::post('/notifications/toggle', [NotificationController::class, 'toggleNotifications'])->name('notifications.toggle');
+
+    Route::post('/notifications/toggle_watsapp', [WhatsappController::class,'toggleNotifications'])->name('notifications.toggle.watsapp');
+
+   //inner toggle watsapp// Route::post('/send-whatsapp-notification', [WhatsAppController::class, 'store']);
 
     Route::post('/notifications/update-time', [NotificationController::class, 'updateNotificationTime'])->name('notifications.updateTime');
 

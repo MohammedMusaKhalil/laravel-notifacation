@@ -11233,6 +11233,7 @@ body {
   font-size: 0.75rem;
   border-radius: 0.375rem !important;
 }
+
 .notification-toggle {
     display: flex;
     align-items: center;
@@ -11283,3 +11284,39 @@ body {
   .hidden {
     display: none;
   }
+
+
+
+
+
+
+  /* الأساسيات العامة للنموذج */
+#whatsapp-notification-form {
+    border-radius: 8px; /* زوايا دائرية */
+}
+
+/* أسلوب العنصر الخارجي */
+.notification-toggle {
+    position: relative;
+    display: inline-block;
+    width: 50px; /* عرض زر التبديل */
+    height: 24px; /* ارتفاع زر التبديل */
+    margin-left: 10px; /* المسافة بين الملصق وزر التبديل */
+}
+
+/* أسلوب الزر */
+
+/* الحالة عندما يكون الزر مفعلًا */
+input[type="checkbox"]:checked + .toggle-label {
+    background-color: #4CAF50; /* اللون عند التفعيل */
+}
+
+input[type="checkbox"]:checked + .toggle-label .toggle-switch {
+    transform: translateX(26px); /* تحريك المقبض عند التفعيل */
+}
+
+/* أسلوب النص */
+label.text-gray-600 {
+    font-size: 16px; /* حجم خط النص */
+    color: #4A5568; /* لون النص */
+}

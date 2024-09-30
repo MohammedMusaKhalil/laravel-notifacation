@@ -41,7 +41,6 @@ class NotificationController extends Controller
                 }
             }
         }
-
         return view('notificatin', compact('notifications')); // تمرير الإشعارات إلى العرض
     }
 
