@@ -5,44 +5,77 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Stichoza\GoogleTranslate\GoogleTranslate;
 use Illuminate\Support\Str;
 class NotificationController extends Controller
 {
     public function index()
-    {
-        $user = Auth::user();
-        $notifications = null;
+{
+    $user = Auth::user();
+    $notifications = null;
 
-        // جلب المنطقة الزمنية المخزنة في الجلسة أو اعتماد المنطقة الزمنية الافتراضية
-        $userTimezone = session('timezone', config('app.timezone'));
+    // جلب المنطقة الزمنية المخزنة في الجلسة أو اعتماد المنطقة الزمنية الافتراضية
+    $userTimezone = session('timezone', config('app.timezone'));
 
-        if (!$user->notifications_disabled) {
-            // إذا كان `email_verified_at` فارغًا، عرض الإشعارات فقط بناءً على التاريخ
-            if (is_null($user->email_verified_at)) {
+    // الحصول على اللغة الحالية
+    $locale = App::getLocale();
+
+    if (!$user->notifications_disabled) {
+        // إذا كان `email_verified_at` فارغًا، عرض الإشعارات فقط بناءً على التاريخ
+        if (is_null($user->email_verified_at)) {
+            $notifications = DB::table('notificationsuser')
+                ->where('notifiable_id', $user->id)
+                ->where('read_at', null)
+                ->whereDate('notification_date', Carbon::today($userTimezone)) // استخدام المنطقة الزمنية
+                ->select(
+                    'id',
+                    'created_at',
+                    'read_at',
+                    'notification_date',
+                    DB::raw("(CASE
+                        WHEN '$locale' = 'ar' THEN message_ar
+                        WHEN '$locale' = 'en' THEN message_en
+                        WHEN '$locale' = 'fr' THEN message_fr
+                        WHEN '$locale' = 'de' THEN message_de
+                        ELSE message_en -- لغة افتراضية
+                    END) as data") // استخدام `data` لتخزين الرسالة
+                )
+                ->get();
+        } else {
+            // استخدم الوقت الحالي بناءً على المنطقة الزمنية للمستخدم
+            $currentTime = Carbon::now($userTimezone);
+            $currentTimeString = $currentTime->toTimeString();
+
+            $storedTime = Carbon::parse($user->email_verified_at, $userTimezone)->toTimeString();
+            if ($currentTimeString >= $storedTime) {
                 $notifications = DB::table('notificationsuser')
                     ->where('notifiable_id', $user->id)
                     ->where('read_at', null)
                     ->whereDate('notification_date', Carbon::today($userTimezone)) // استخدام المنطقة الزمنية
+                    ->select(
+                        'id',
+                        'created_at',
+                        'read_at',
+                        'notification_date',
+                        DB::raw("(CASE
+                            WHEN '$locale' = 'ar' THEN message_ar
+                            WHEN '$locale' = 'en' THEN message_en
+                            WHEN '$locale' = 'fr' THEN message_fr
+                            WHEN '$locale' = 'de' THEN message_de
+                            ELSE message_en -- لغة افتراضية
+                        END) as data") // استخدام `data` لتخزين الرسالة
+                    )
                     ->get();
-            } else {
-                // استخدم الوقت الحالي بناءً على المنطقة الزمنية للمستخدم
-                $currentTime = Carbon::now($userTimezone);
-                $currentTimeString = $currentTime->toTimeString();
-
-                $storedTime = Carbon::parse($user->email_verified_at, $userTimezone)->toTimeString();
-                if ($currentTimeString >= $storedTime) {
-                    $notifications = DB::table('notificationsuser')
-                        ->where('notifiable_id', $user->id)
-                        ->where('read_at', null)
-                        ->whereDate('notification_date', Carbon::today($userTimezone)) // استخدام المنطقة الزمنية
-                        ->get();
-                }
             }
         }
-        return view('notificatin', compact('notifications')); // تمرير الإشعارات إلى العرض
     }
+
+    return view('notificatin', compact('notifications')); // تمرير الإشعارات إلى العرض
+}
+
 
 
         public function markAsRead($id)
@@ -77,7 +110,12 @@ class NotificationController extends Controller
             // الرسالة المرسلة من النموذج
             $message = $request->input('message');
             $notificationDate = $request->input('notification_date');
-            // إرسال الرسالة لكل مستخدم
+
+            $translatedMessageAr = $this->translateMessage($message, 'ar');
+            $translatedMessageEn = $this->translateMessage($message, 'en');
+            $translatedMessageFr = $this->translateMessage($message, 'fr');
+            $translatedMessageDe = $this->translateMessage($message, 'de');
+                    // إرسال الرسالة لكل مستخدم
             foreach ($users as $user) {
                 DB::table('notificationsuser')->insert([
                     'id' => Str::uuid(), // توليد UUID
@@ -85,6 +123,10 @@ class NotificationController extends Controller
                     'notifiable_id' => $user->id,
                     'notifiable_type' => User::class, // تعيين نوع المستخدم
                     'data' => $message,
+                    'message_ar' => $translatedMessageAr,
+                    'message_en' => $translatedMessageEn,
+                    'message_fr' => $translatedMessageFr,
+                    'message_de' => $translatedMessageDe,
                     'notification_date' => $notificationDate,
                     'created_at' => now(),
                     'updated_at' => now(),
@@ -93,6 +135,18 @@ class NotificationController extends Controller
 
             return redirect()->back()->with('success', 'Notification sent to all users successfully!');
         }
+
+
+        private function translateMessage($message, $locale)
+        {
+            $tr = new GoogleTranslate();
+            $tr->setSource('auto'); // اكتشاف اللغة تلقائيًا
+            $tr->setTarget($locale); // تعيين اللغة الهدف
+
+            return $tr->translate($message);
+        }
+
+
         public function updateNotificationTime(Request $request)
     {
         $user = auth()->user();
@@ -117,6 +171,9 @@ class NotificationController extends Controller
         // جلب المنطقة الزمنية المخزنة في الجلسة أو اعتماد المنطقة الزمنية الافتراضية
         $userTimezone = session('timezone', config('app.timezone'));
 
+        // الحصول على اللغة الحالية
+        $locale = App::getLocale();
+
         if (!$user->notifications_disabled) {
             // إذا كان `email_verified_at` فارغًا، عرض الإشعارات فقط بناءً على التاريخ
             if (is_null($user->email_verified_at)) {
@@ -124,6 +181,19 @@ class NotificationController extends Controller
                     ->where('notifiable_id', $user->id)
                     ->where('read_at', null)
                     ->whereDate('notification_date', Carbon::today($userTimezone)) // استخدام المنطقة الزمنية
+                    ->select(
+                        'id',
+                        'created_at',
+                        'read_at',
+                        'notification_date',
+                        DB::raw("(CASE
+                            WHEN '$locale' = 'ar' THEN message_ar
+                            WHEN '$locale' = 'en' THEN message_en
+                            WHEN '$locale' = 'fr' THEN message_fr
+                            WHEN '$locale' = 'de' THEN message_de
+                            ELSE message_en -- لغة افتراضية
+                        END) as data") // استخدام `data` لتخزين الرسالة
+                    )
                     ->get();
             } else {
                 // استخدم الوقت الحالي بناءً على المنطقة الزمنية للمستخدم
@@ -136,10 +206,24 @@ class NotificationController extends Controller
                         ->where('notifiable_id', $user->id)
                         ->where('read_at', null)
                         ->whereDate('notification_date', Carbon::today($userTimezone)) // استخدام المنطقة الزمنية
+                        ->select(
+                            'id',
+                            'created_at',
+                            'read_at',
+                            'notification_date',
+                            DB::raw("(CASE
+                                WHEN '$locale' = 'ar' THEN message_ar
+                                WHEN '$locale' = 'en' THEN message_en
+                                WHEN '$locale' = 'fr' THEN message_fr
+                                WHEN '$locale' = 'de' THEN message_de
+                                ELSE message_en -- لغة افتراضية
+                            END) as data") // استخدام `data` لتخزين الرسالة
+                        )
                         ->get();
                 }
             }
         }
+
 
         return response()->json($notifications);
      }

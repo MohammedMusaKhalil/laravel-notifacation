@@ -86,7 +86,8 @@ return [
     'languages'=>[
         'en' => 'English',
         'ar'=> 'العربية',
-        'fr'=>'Frensh'
+        'fr'=>'Frensh',
+        'de'=>'Deutsch'
     ],
 
     /*
