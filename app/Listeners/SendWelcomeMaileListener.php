@@ -22,8 +22,8 @@ class SendWelcomeMaileListener
      */
     public function handle(object $event): void
     {
-        Mail::to($event->user->email)->send(
-            new WelcomMail($event->user)
-        );
+        // Mail::to($event->user->email)->send(
+        //     new WelcomMail($event->user)
+        // );
     }
 }

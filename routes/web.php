@@ -41,6 +41,9 @@ Route::middleware('auth')->group(function () {
 
     Route::post('/notifications/toggle', [NotificationController::class, 'toggleNotifications'])->name('notifications.toggle');
 
+
+    Route::patch('/notifications/update', [NotificationController::class, 'updateNotifications'])->name('notifications.update');
+
     Route::post('/notifications/toggle_watsapp', [WhatsappController::class,'toggleNotifications'])->name('notifications.toggle.watsapp');
 
    //inner toggle watsapp// Route::post('/send-whatsapp-notification', [WhatsAppController::class, 'store']);

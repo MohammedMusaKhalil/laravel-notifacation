@@ -18,33 +18,119 @@
         @method('patch')
 
         <div>
-            <x-input-label for="name" :value="__('Name')" />
-            <x-text-input id="name" name="name" type="text" class="mt-1 block w-full" :value="old('name', $user->name)" required autofocus autocomplete="name" />
-            <x-input-error class="mt-2" :messages="$errors->get('name')" />
+            <x-input-label for="first_name" :value="__('First Name')" />
+            <x-text-input id="first_name" name="first_name" type="text" class="mt-1 block w-full" :value="old('first_name', $user->first_name)" required />
+            <x-input-error class="mt-2" :messages="$errors->get('first_name')" />
+        </div>
+
+        <div>
+            <x-input-label for="last_name" :value="__('Last Name')" />
+            <x-text-input id="last_name" name="last_name" type="text" class="mt-1 block w-full" :value="old('last_name', $user->last_name)" required />
+            <x-input-error class="mt-2" :messages="$errors->get('last_name')" />
         </div>
 
         <div>
             <x-input-label for="email" :value="__('Email')" />
             <x-text-input id="email" name="email" type="email" class="mt-1 block w-full" :value="old('email', $user->email)" required autocomplete="username" />
             <x-input-error class="mt-2" :messages="$errors->get('email')" />
+        </div>
 
-            @if ($user instanceof \Illuminate\Contracts\Auth\MustVerifyEmail && ! $user->hasVerifiedEmail())
-                <div>
-                    <p class="text-sm mt-2 text-gray-800">
-                        {{ __('Your email address is unverified.') }}
+        <div>
+            <x-input-label for="phone" :value="__('Phone')" />
+            <x-text-input id="phone" name="phone" type="text" class="mt-1 block w-full" :value="old('phone', $user->phone)" />
+            <x-input-error class="mt-2" :messages="$errors->get('phone')" />
+        </div>
 
-                        <button form="send-verification" class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                            {{ __('Click here to re-send the verification email.') }}
-                        </button>
-                    </p>
+        <div>
+            <x-input-label for="date_of_birth" :value="__('Date of Birth')" />
+            <x-text-input id="date_of_birth" name="date_of_birth" type="date" class="mt-1 block w-full" :value="old('date_of_birth', $user->date_of_birth)" />
+            <x-input-error class="mt-2" :messages="$errors->get('date_of_birth')" />
+        </div>
 
-                    @if (session('status') === 'verification-link-sent')
-                        <p class="mt-2 font-medium text-sm text-green-600">
-                            {{ __('A new verification link has been sent to your email address.') }}
-                        </p>
-                    @endif
-                </div>
-            @endif
+        <div>
+            <x-input-label for="gender" :value="__('Gender')" />
+            <select id="gender" name="gender" class="mt-1 block w-full">
+                <option value="Male" {{ old('gender', $user->gender) == 'Male' ? 'selected' : '' }}>{{ __('Male') }}</option>
+                <option value="Female" {{ old('gender', $user->gender) == 'Female' ? 'selected' : '' }}>{{ __('Female') }}</option>
+                <option value="Other" {{ old('gender', $user->gender) == 'Other' ? 'selected' : '' }}>{{ __('Other') }}</option>
+            </select>
+            <x-input-error class="mt-2" :messages="$errors->get('gender')" />
+        </div>
+
+        <div>
+            <x-input-label for="personality" :value="__('Personality')" />
+            <x-text-input id="personality" name="personality" type="text" class="mt-1 block w-full" :value="old('personality', $user->personality)" />
+            <x-input-error class="mt-2" :messages="$errors->get('personality')" />
+        </div>
+
+        <div>
+            <x-input-label for="zodiac_sign_id" :value="__('Zodiac Sign')" />
+            <select id="zodiac_sign_id" name="zodiac_sign_id" class="mt-1 block w-full">
+                @foreach($zodiacSigns as $zodiacSign)
+                    <option value="{{ $zodiacSign->id }}" {{ old('zodiac_sign_id', $user->zodiac_sign_id) == $zodiacSign->id ? 'selected' : '' }}>{{ $zodiacSign->zodiacn }}</option>
+                @endforeach
+            </select>
+            <x-input-error class="mt-2" :messages="$errors->get('zodiac_sign_id')" />
+        </div>
+
+        <div>
+            <x-input-label for="hobbie_id" :value="__('Hobbies')" />
+            <select id="hobbie_id" name="hobbie_id" class="mt-1 block w-full">
+                @foreach($hobbies as $hobby)
+                    <option value="{{ $hobby->id }}" {{ old('hobbie_id', $user->hobbie_id) == $hobby->id ? 'selected' : '' }}>{{ $hobby->hobby_name }}</option>
+                @endforeach
+            </select>
+            <x-input-error class="mt-2" :messages="$errors->get('zodiac_sign_id')" />
+        </div>
+
+        <div>
+            <x-input-label for="favorite_color_id" :value="__('Favorite Colors')" />
+            <select id="favorite_color_id" name="favorite_color_id" class="mt-1 block w-full">
+                @foreach($favorite_colors as $favorite_color)
+                    <option value="{{ $favorite_color->id }}" {{ old('favorite_color_id', $user->favorite_color_id) == $favorite_color->id ? 'selected' : '' }}>{{ $favorite_color->color_name }}</option>
+                @endforeach
+            </select>
+            <x-input-error class="mt-2" :messages="$errors->get('zodiac_sign_id')" />
+        </div>
+
+        <div>
+            <x-input-label for="favorite_book_id" :value="__('Favorite Books')" />
+            <select id="favorite_book_id" name="favorite_book_id" class="mt-1 block w-full">
+                @foreach($favorite_books as $favorite_book)
+                    <option value="{{ $favorite_book->id  }}" {{ old('favorite_book_id', $user->favorite_book_id) == $favorite_book->id ? 'selected' : '' }}>{{ $favorite_book->book_name }}</option>
+                @endforeach
+            </select>
+            <x-input-error class="mt-2" :messages="$errors->get('zodiac_sign_id')" />
+        </div>
+
+        <div>
+            <x-input-label for="favorite_music_id" :value="__('Favorite Music')" />
+            <select id="favorite_music_id" name="favorite_music_id" class="mt-1 block w-full">
+                @foreach($favorite_music as $music)
+                    <option value="{{  $music->id  }}" {{ old('favorite_music_id', $user->favorite_music_id) == $music->id ? 'selected' : '' }}>{{ $music->music_genre }}</option>
+                @endforeach
+            </select>
+            <x-input-error class="mt-2" :messages="$errors->get('zodiac_sign_id')" />
+        </div>
+        <div>
+            <x-input-label for="language_id" :value="__('Language')" />
+            <select id="language_id" name="language_id" class="mt-1 block w-full">
+                @foreach($languages as $lang)
+                    <option value="{{  $lang->id  }}" {{ old('language_id', $user->language_id) == $lang->id ? 'selected' : '' }}>
+                        {{ $lang->language }}
+                    </option>
+                @endforeach
+            </select>
+            <x-input-error class="mt-2" :messages="$errors->get('language_id')" />
+        </div>
+        <div>
+            <x-input-label for="other_interest_id" :value="__('Other Interests')" />
+            <select id="other_interest_id" name="other_interest_id" class="mt-1 block w-full" >
+                @foreach($other_interests as $other_interest)
+                    <option value="{{ $other_interest->id }}" {{ old('other_interest_id', $user->other_interest_id) == $other_interest->id ? 'selected' : '' }}>{{ $other_interest->interest_name }}</option>
+                @endforeach
+            </select>
+            <x-input-error class="mt-2" :messages="$errors->get('other_interest_id')" />
         </div>
 
         <div class="flex items-center gap-4">

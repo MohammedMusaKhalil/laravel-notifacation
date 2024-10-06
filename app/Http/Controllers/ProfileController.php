@@ -3,6 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
+use App\Models\Favorite_book;
+use App\Models\Favorite_color;
+use App\Models\Favorite_music;
+use App\Models\Hobbie;
+use App\Models\Language;
+use App\Models\Other_interest;
+use App\Models\Zodiacsign;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -17,8 +24,22 @@ class ProfileController extends Controller
      */
     public function edit(Request $request): View
     {
+        $zodiacSigns=Zodiacsign::all();
+        $hobbis=Hobbie::all();
+        $favorite_book=Favorite_book::all();
+        $favorite_color=Favorite_color::all();
+        $favorite_music=Favorite_music::all();
+        $other_interest=Other_interest::all();
+        $languages=Language::all();
         return view('profile.edit', [
             'user' => $request->user(),
+            'zodiacSigns' => $zodiacSigns,
+            'hobbies'=>$hobbis,
+            'favorite_books'=>$favorite_book,
+            'favorite_colors'=>$favorite_color,
+            'favorite_music'=>$favorite_music,
+            'other_interests'=>$other_interest,
+            'languages'=>$languages,
         ]);
     }
     public function editapi(Request $request)
@@ -32,17 +53,38 @@ class ProfileController extends Controller
      * Update the user's profile information.
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse
-    {
-        $request->user()->fill($request->validated());
+{
+    $user = $request->user();
 
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
-        }
+    // تحديث معلومات المستخدم
+    $user->first_name = $request->input('first_name');
+    $user->last_name = $request->input('last_name');
+    $user->email = $request->input('email');
 
-        $request->user()->save();
-
-        return Redirect::route('profile.edit')->with('status', 'profile-updated');
+    // إذا تم تغيير البريد الإلكتروني، أعد تعيين تاريخ التحقق
+    if ($user->isDirty('email')) {
+        $user->email_verified_at = null;
     }
+
+    $user->phone = $request->input('phone');
+    $user->date_of_birth = $request->input('date_of_birth');
+    $user->gender = $request->input('gender');
+    $user->personality = $request->input('personality');
+    $user->zodiac_sign_id = $request->input('zodiac_sign_id');
+    $user->hobbie_id=$request->input('hobbie_id');
+   $user->favorite_music_id=$request->input('favorite_music_id');
+   $user->favorite_color_id=$request->input('favorite_color_id');
+   $user->favorite_book_id=$request->input('favorite_book_id');
+   $user->other_interest_id=$request->input('other_interest_id');
+   $user->language_id=$request->input('language_id');
+    // حفظ معلومات المستخدم
+    $user->save();
+
+    return Redirect::route('profile.edit');
+}
+
+
+
 
     public function updateapi(ProfileUpdateRequest $request)
 {

@@ -12,6 +12,7 @@ use Stichoza\GoogleTranslate\GoogleTranslate;
 use Illuminate\Support\Str;
 class NotificationController extends Controller
 {
+
     public function index()
 {
     $user = Auth::user();
@@ -76,7 +77,32 @@ class NotificationController extends Controller
     return view('notificatin', compact('notifications')); // تمرير الإشعارات إلى العرض
 }
 
+public function updateNotifications(Request $request)
+    {
+        $user = auth()->user();
 
+        // تحقق إذا كان لدى المستخدم `usernotification`، إذا لم يكن لديه، أنشئه.
+        if (!$user->usernotification) {
+            $user->usernotification()->create();
+        }
+
+        // تحديث الحقول
+        $user->usernotification->update([
+            'enableDailyHoroscope' => $request->has('enableDailyHoroscope') ? 1 : 0,
+            'enableWeeklyHoroscope' => $request->has('enableWeeklyHoroscope') ? 1 : 0,
+            'enableMonthlyHoroscope' => $request->has('enableMonthlyHoroscope') ? 1 : 0,
+            'enableDailyTips' => $request->has('enableDailyTips') ? 1 : 0,
+            'enableFinancialTips' => $request->has('enableFinancialTips') ? 1 : 0,
+            'enableGirlsTips' => $request->has('enableGirlsTips') ? 1 : 0,
+            'enableHealthTips' => $request->has('enableHealthTips') ? 1 : 0,
+            'enableMarriageTips' => $request->has('enableMarriageTips') ? 1 : 0,
+            'enable_weekly' => $request->has('enable_weekly') ? 1 : 0,
+            'enable_monthly' => $request->has('enable_monthly') ? 1 : 0,
+            'lastNotificationDate' => $request->input('lastNotificationDate'),  // تعديل أو تحديث آخر وقت إشعار
+        ]);
+
+        return redirect()->back()->with('status', 'Notification settings updated successfully!');
+    }
 
         public function markAsRead($id)
     {
@@ -254,16 +280,27 @@ class NotificationController extends Controller
     public function sendToAllUsersapi(Request $request)
     {
         $users = User::all();
+
+        // الرسالة المرسلة من النموذج
         $message = $request->input('message');
         $notificationDate = $request->input('notification_date');
 
+        $translatedMessageAr = $this->translateMessage($message, 'ar');
+        $translatedMessageEn = $this->translateMessage($message, 'en');
+        $translatedMessageFr = $this->translateMessage($message, 'fr');
+        $translatedMessageDe = $this->translateMessage($message, 'de');
+                // إرسال الرسالة لكل مستخدم
         foreach ($users as $user) {
             DB::table('notificationsuser')->insert([
-                'id' => Str::uuid(),
-                'type' => 'App\\Notifications\\UserRegisterNotification',
+                'id' => Str::uuid(), // توليد UUID
+                'type' => 'App\\Notifications\\UserRegisterNotification', // تعيين نوع الإشعار
                 'notifiable_id' => $user->id,
-                'notifiable_type' => User::class,
+                'notifiable_type' => User::class, // تعيين نوع المستخدم
                 'data' => $message,
+                'message_ar' => $translatedMessageAr,
+                'message_en' => $translatedMessageEn,
+                'message_fr' => $translatedMessageFr,
+                'message_de' => $translatedMessageDe,
                 'notification_date' => $notificationDate,
                 'created_at' => now(),
                 'updated_at' => now(),
