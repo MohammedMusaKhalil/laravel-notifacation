@@ -21,6 +21,12 @@ use Illuminate\Http\Request;
 Route::get('/', function () {
     return view('welcome');
 });
+Route::get('/geoip', function () {
+
+
+    $geoipInfo = geoip()->getLocation($_SERVER['REMOTE_ADDR']);
+    return $geoipInfo->toArray();
+});
 
 Route::get('/wa', [WhatsappController::class, 'index']);
 

@@ -30,6 +30,10 @@ class AuthenticatedSessionController extends Controller
         $request->authenticate();
 
         $request->session()->regenerate();
+        $user = Auth::user();
+        $geoipInfo = geoip()->getLocation($_SERVER['REMOTE_ADDR']);
+        $user->country = $geoipInfo->country;
+        $user->save();
 
         return redirect()->intended(RouteServiceProvider::HOME);
     }
