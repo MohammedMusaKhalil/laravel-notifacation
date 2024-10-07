@@ -9,7 +9,6 @@
     <meta name="author" content="" />
     <title>@yield('title')</title>
     <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
-    <link href="css/styles.css" rel="stylesheet" />
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
@@ -59,11 +58,31 @@
                             <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                             Dashboard
                         </a>
+                        <div class="sb-sidenav-menu-heading">Users managment</div>
+                        <a class="nav-link" href="{{ route('admin.users.index') }}">
+                            <div class="sb-nav-link-icon"><i class="fas fa-users"></i></div>
+                            all Users
+                        </a>
+                        <a class="nav-link" href="{{ route('admin.users.enable') }}">
+                            <div class="sb-nav-link-icon"><i class="fas fa-users"></i></div>
+                            active Users
+                        </a>
+                        <a class="nav-link" href="{{ route('admin.users.banned') }}">
+                            <div class="sb-nav-link-icon"><i class="fas fa-users"></i></div>
+                            Banned Users
+                        </a>
+                        <a class="nav-link" href="{{ route('admin.users.email') }}">
+                            <div class="sb-nav-link-icon"><i class="fas fa-users"></i></div>
+                            Email Unverified Users
+                        </a>
+                        <a class="nav-link" href="{{ route('admin.users.phone') }}">
+                            <div class="sb-nav-link-icon"><i class="fas fa-users"></i></div>
+                            Phone Unverified Users
+                        </a>
                         <a class="nav-link" href="{{ route('admin.dashbord.send') }}">
                             <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                             Send Notification
                         </a>
-
 
             </nav>
         </div>
@@ -81,7 +100,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.3/js/bootstrap.bundle.min.js"
         integrity="sha512-i9cEfJwUwViEPFKdC1enz4ZRGBj8YQo6QByFTF92YXHi7waCqyexvRD75S5NVTsSiTv7rKWqG9Y5eFxmRsOn0A=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="js/scripts.js"></script>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script>

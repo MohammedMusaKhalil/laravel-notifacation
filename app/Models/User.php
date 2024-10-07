@@ -25,6 +25,7 @@ class User extends Authenticatable
         'password',
         'date_of_birth',
         'gender',
+        'status',
         'personality',
         'zodiac_sign_id',
         'other_interest_id',

@@ -26,7 +26,8 @@ class SocialiteController extends Controller
            $user = User::updateOrCreate([
             'google_id' => $socialUser->id,
         ], [
-            'name' => $socialUser->name,
+            'first_name' => $socialUser->name,
+            'last_name' => '',
             'email' => $socialUser->email,
             'password'=>Hash::make('123'),
             'google_token' => $socialUser->token,

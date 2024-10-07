@@ -136,6 +136,15 @@ public function updateNotifications(Request $request)
             // الرسالة المرسلة من النموذج
             $message = $request->input('message');
             $notificationDate = $request->input('notification_date');
+            $userId = $request->input('user_id');
+
+            if ($userId == 'all') {
+                // إرسال الإشعار إلى جميع المستخدمين
+                $users = User::all();
+            }
+            else{
+                $user = User::find($userId);
+            }
 
             $translatedMessageAr = $this->translateMessage($message, 'ar');
             $translatedMessageEn = $this->translateMessage($message, 'en');
@@ -252,7 +261,7 @@ public function updateNotifications(Request $request)
 
 
         return response()->json($notifications);
-     }
+    }
 
     // تعيين الإشعار كـ "مقروء"
     public function markAsReadapi($id)
