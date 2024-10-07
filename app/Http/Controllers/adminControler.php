@@ -51,8 +51,18 @@ public function showPhoneUsers()
     public function index()
     {
         $admin = Admin::find(1);
+        $totalUsers = User::count();
+
+        // حساب عدد المستخدمين الذين أضافوا حقل phone
+        $usersWithPhone = User::whereNotNull('phone')->count();
+
+        // حساب عدد المستخدمين الذين أضافوا حقل google_id
+        $usersWithEmail = User::whereNotNull('google_id')->count();
+
+        // حساب عدد المستخدمين الذين لديهم status = 1
+        $activeUsers = User::where('status', 1)->count();
         $notifications = $admin->unreadNotifications;
-        return view('Admin.dashbord.dashbord', compact('notifications'));
+        return view('Admin.dashbord.dashbord', compact('notifications', 'totalUsers', 'usersWithPhone', 'usersWithEmail', 'activeUsers'));
     }
 
     public function markNotification(Request $request) {

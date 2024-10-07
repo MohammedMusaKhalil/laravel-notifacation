@@ -8,11 +8,76 @@
             <li class="breadcrumb-item active">Dashboard</li>
         </ol>
         <div class="row">
+            <div class="col-xl-3 col-md-6">
+                <div class="card bg-primary text-white mb-4">
+                    <div class="card-body">
+                        <i class="fas fa-users fa-2x m-2"></i>
+                        <span class="ml-3 display-6">{{ $totalUsers }}</span>
+                           <div class="display-7"> All Users</div>
+                    </div>
+                    <div class="card-footer d-flex align-items-center justify-content-between">
+                        <a class="small text-white stretched-link" href="{{ route('admin.users.index') }}">
+                            <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-3 col-md-6">
+                <div class="card bg-primary text-white mb-4">
+                    <div class="card-body">
+                        <i class="fas fa-users fa-2x m-2"></i>
+                        <span class="ml-3 display-6">{{ $activeUsers }}</span>
+                        <div class="display-7"> Active Users <span class="fas fa-check-circle fa-1x ml-2" style="color: green;"></span></div>
+                        <!-- أيقونة إضافية -->
+                    </div>
+                    <div class="card-footer d-flex align-items-center justify-content-between">
+                        <a class="small text-white stretched-link" href="{{ route('admin.users.enable') }}">
+                            <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6">
+                <div class="card bg-primary text-white mb-4">
+                    <div class="card-body">
+                        <i class="fas fa-envelope fa-2x m-2"></i>
+                        <span class="ml-3 display-6">{{ $usersWithEmail }}</span>
+                        <div class="display-7">
+                            Email Unverified Users
+                        </div>
+                    </div>
+                    <div class="card-footer d-flex align-items-center justify-content-between">
+                        <a class="small text-white stretched-link" href="{{ route('admin.users.email') }}">
+                            <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6">
+                <div class="card bg-primary text-white mb-4">
+                    <div class="card-body">
+                        <i class="fas fa-phone fa-2x m-2"></i>
+                        <span class="ml-3 display-6">{{ $usersWithPhone }}</span>
+                        <div class="display-7">
+                            Phone Unverified Users
+                        </div>
+                    </div>
+                    <div class="card-footer d-flex align-items-center justify-content-between">
+                        <a class="small text-white stretched-link" href="{{ route('admin.users.phone') }}">
+                            <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="row">
             <div class="col-xl-14">
                 <div class="card mb-4">
                     <div class="card-header">
                         <i class="fas fa-chart-area me-1"></i>
-                        Notification
+                        Notification Users Registers
                     </div>
                     <div class="card-body">
                         @forelse ($notifications as $n)
