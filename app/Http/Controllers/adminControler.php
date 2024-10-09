@@ -6,9 +6,76 @@ use App\Http\Requests\ProfileUpdateRequest;
 use App\Models\Admin;
 use App\Models\User;
 use Illuminate\Http\Request;
+use LaravelDaily\LaravelCharts\Classes\LaravelChart;
+use Carbon\Carbon;
+
 
 class adminControler extends Controller
 {
+
+
+    public function User_statistics()
+    {
+        // Blocks showing user login statistics
+        $number_blocks = [
+            [
+                'title' => 'Users Logged In Today',
+                'number' => User::whereDate('last_login_at', today())->count()
+            ],
+            [
+                'title' => 'Users Logged In Last 7 Days',
+                'number' => User::where('last_login_at', '>=', today()->subDays(7))->count()
+            ],
+            [
+                'title' => 'Users Logged In Last 30 Days',
+                'number' => User::where('last_login_at', '>=', today()->subDays(30))->count()
+            ],
+        ];
+
+        // Blocks listing recent login activity and inactive users
+        $list_blocks = [
+            [
+                'title' => 'Last Logged In Users',
+                'entries' => User::orderBy('last_login_at', 'desc')
+                    ->take(5)
+                    ->get(),
+            ],
+            [
+                'title' => 'Users Not Logged In For 30 Days',
+                'entries' => User::where(function($query) {
+                        $query->where('last_login_at', '<', today()->subDays(30))
+                              ->orWhereNull('last_login_at');
+                    })
+                    ->orderBy('last_login_at', 'desc')
+                    ->take(5)
+                    ->get()
+            ],
+        ];
+
+        // Get daily login data for the last 30 days
+        $startDate = Carbon::now()->subDays(30);
+        $loginsLast30Days = User::where('last_login_at', '>=', $startDate)
+            ->selectRaw('DATE(last_login_at) as date, COUNT(*) as count')
+            ->groupBy('date')
+            ->orderBy('date', 'ASC')
+            ->get();
+
+        // Prepare the data for the chart
+        $dates = [];
+        $counts = [];
+        $start = $startDate->copy();
+        $end = Carbon::now();
+
+        while ($start <= $end) {
+            $date = $start->format('Y-m-d');
+            $dates[] = $date;
+            $count = $loginsLast30Days->firstWhere('date', $date)->count ?? 0;
+            $counts[] = $count;
+            $start->addDay();
+        }
+
+        return view('admin.dashbord.user_statistics', compact('number_blocks', 'list_blocks', 'dates', 'counts'));
+    }
 
     public function showEmailUsers()
 {

@@ -25,6 +25,7 @@ return new class extends Migration
             $table->enum('gender', ['Male', 'Female', 'Other'])->nullable();
             $table->integer('status')->default(1);
             $table->datetime('registration_date')->nullable();
+            $table->datetime('last_login_at')->nullable();
             $table->tinyInteger('email_confirmed')->default(0);
             $table->string('personality')->nullable();
             $table->time('email_verified_at')->nullable();

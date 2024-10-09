@@ -58,6 +58,10 @@
                             <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                             Dashboard
                         </a>
+                        <a class="nav-link" href="{{ route('admin.dashbord.User_statistics') }}">
+                            <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                            Users Statistics
+                        </a>
                         <div class="sb-sidenav-menu-heading">Users managment</div>
                         <a class="nav-link" href="{{ route('admin.users.index') }}">
                             <div class="sb-nav-link-icon"><i class="fas fa-users"></i></div>
@@ -97,6 +101,12 @@
             </footer>
         </div>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    <script src="{{ asset('js/scripts.js')}}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
+    {{-- <script src="{{ asset('assets/demo/chart-area-demo.js')}}"></script>
+    <script src="{{ asset('assets/demo/chart-bar-demo.js')}}"></script>
+    <script src="{{ asset('assets/demo/chart-pie-demo.js')}}"></script> --}}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.3/js/bootstrap.bundle.min.js"
         integrity="sha512-i9cEfJwUwViEPFKdC1enz4ZRGBj8YQo6QByFTF92YXHi7waCqyexvRD75S5NVTsSiTv7rKWqG9Y5eFxmRsOn0A=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
@@ -134,6 +144,7 @@
             });
         });
     </script>
+    @yield('scripts')
 </body>
 
 </html>

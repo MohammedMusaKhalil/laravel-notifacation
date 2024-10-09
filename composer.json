@@ -12,6 +12,7 @@
         "laravel/sanctum": "^3.3",
         "laravel/socialite": "^5.16",
         "laravel/tinker": "^2.7",
+        "laraveldaily/laravel-charts": "^0.2.3",
         "stichoza/google-translate-php": "^5.2",
         "torann/geoip": "^3.0",
         "twilio/sdk": "^8.3"

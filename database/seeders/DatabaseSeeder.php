@@ -5,6 +5,10 @@ namespace Database\Seeders;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Faker\Factory as Faker;
+use Illuminate\Support\Arr;
+
+
 
 class DatabaseSeeder extends Seeder
 {
@@ -15,7 +19,18 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // \App\Models\User::factory(10)->create();
+        $faker = Faker::create();
+
+        // إدخال 25 مستخدم عشوائي
+        foreach (range(1, 25) as $index) {
+            \App\Models\User::create([
+                'first_name' => $faker->firstName,
+                'last_name' => $faker->lastName,
+                'email' => $faker->unique()->safeEmail,
+                'password' => bcrypt('password'), // كلمة مرور افتراضية
+                'last_login_at' => Arr::random([now()->subDays(rand(1,30)), null]),
+            ]);
+        }
 
         \App\Models\Admin::create([
             'name' => 'Admin',

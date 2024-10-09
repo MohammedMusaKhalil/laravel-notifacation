@@ -25,6 +25,8 @@ Route::middleware(['web', 'isAdmin'])->group(function(){
 
 
     Route::get('/users', [adminControler::class, 'showUsers'])->name('users.index');
+
+    Route::get('/user_statistics', [adminControler::class, 'User_statistics'])->name('dashbord.User_statistics');
     // Route لعرض صفحة تعديل المستخدم
     Route::get('/users/{id}/edit', [adminControler::class, 'edit'])->name('users.edit');
     // Route لتحديث بيانات المستخدم

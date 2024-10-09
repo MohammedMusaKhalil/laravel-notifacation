@@ -13,6 +13,9 @@
                 Users List Phone Unverified
             </div>
             <div class="card-body">
+                @if($users->isEmpty())
+                <p>No phone users found.</p>
+            @else
                 <table class="table table-bordered">
                     <thead>
                         <tr>
@@ -35,6 +38,7 @@
                         @endforeach
                     </tbody>
                 </table>
+                @endif
             </div>
         </div>
     </div>

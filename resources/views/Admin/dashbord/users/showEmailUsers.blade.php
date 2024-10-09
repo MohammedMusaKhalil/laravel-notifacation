@@ -13,6 +13,9 @@
                 Users List Email Unverified
             </div>
             <div class="card-body">
+                @if($users->isEmpty())
+                <p>No Email users found.</p>
+            @else
                 <table class="table table-bordered">
                     <thead>
                         <tr>
@@ -31,6 +34,7 @@
                         @endforeach
                     </tbody>
                 </table>
+                @endif
             </div>
         </div>
     </div>
