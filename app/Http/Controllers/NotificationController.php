@@ -83,7 +83,7 @@ public function updateNotifications(Request $request)
 
         // تحقق إذا كان لدى المستخدم `usernotification`، إذا لم يكن لديه، أنشئه.
         if (!$user->usernotification) {
-            $user->usernotification()->create();
+            $user->usernotification->create();
         }
 
         // تحديث الحقول
@@ -128,48 +128,70 @@ public function updateNotifications(Request $request)
     }
 
 
-        public function sendToAllUsers(Request $request)
-        {
-            // استرجاع جميع المستخدمين
+    public function sendToAllUsers(Request $request)
+    {
+        // استرجاع الرسالة المدخلة
+        $message = $request->input('message');
+        $notificationDate = $request->input('notification_date');
+        $userId = $request->input('user_id');
+
+        // تحديد ما إذا كانت الرسالة مرسلة للجميع
+        $isForAll = ($userId == 'all');
+        $users = collect(); // مجموعة فارغة للمستخدمين
+
+        if ($isForAll) {
+            // استرجاع جميع المستخدمين في حال كانت الرسالة للجميع
             $users = User::all();
-
-            // الرسالة المرسلة من النموذج
-            $message = $request->input('message');
-            $notificationDate = $request->input('notification_date');
-            $userId = $request->input('user_id');
-
-            if ($userId == 'all') {
-                // إرسال الإشعار إلى جميع المستخدمين
-                $users = User::all();
+        } else {
+            // استرجاع المستخدم المحدد إذا كانت الرسالة موجهة لشخص معين
+            $user = User::find($userId);
+            if ($user) {
+                $users = collect([$user]);
             }
-            else{
-                $user = User::find($userId);
-            }
-
-            $translatedMessageAr = $this->translateMessage($message, 'ar');
-            $translatedMessageEn = $this->translateMessage($message, 'en');
-            $translatedMessageFr = $this->translateMessage($message, 'fr');
-            $translatedMessageDe = $this->translateMessage($message, 'de');
-                    // إرسال الرسالة لكل مستخدم
-            foreach ($users as $user) {
-                DB::table('notificationsuser')->insert([
-                    'id' => Str::uuid(), // توليد UUID
-                    'type' => 'App\\Notifications\\UserRegisterNotification', // تعيين نوع الإشعار
-                    'notifiable_id' => $user->id,
-                    'notifiable_type' => User::class, // تعيين نوع المستخدم
-                    'data' => $message,
-                    'message_ar' => $translatedMessageAr,
-                    'message_en' => $translatedMessageEn,
-                    'message_fr' => $translatedMessageFr,
-                    'message_de' => $translatedMessageDe,
-                    'notification_date' => $notificationDate,
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ]);
-            }
-
-            return redirect()->back()->with('success', 'Notification sent to all users successfully!');
         }
+
+        // ترجمة الرسالة إلى اللغات المختلفة
+        $translatedMessageAr = $this->translateMessage($message, 'ar');
+        $translatedMessageEn = $this->translateMessage($message, 'en');
+        $translatedMessageFr = $this->translateMessage($message, 'fr');
+        $translatedMessageDe = $this->translateMessage($message, 'de');
+
+        // إرسال الرسالة لكل مستخدم
+        foreach ($users as $user) {
+            DB::table('notificationsuser')->insert([
+                'id' => Str::uuid(),
+                'type' => 'App\\Notifications\\UserRegisterNotification',
+                'notifiable_id' => $user->id,
+                'notifiable_type' => User::class,
+                'data' => $message,
+                'message_ar' => $translatedMessageAr,
+                'message_en' => $translatedMessageEn,
+                'message_fr' => $translatedMessageFr,
+                'message_de' => $translatedMessageDe,
+                'notification_date' => $notificationDate,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+        }
+
+        // حفظ نسخة من الرسالة المرسلة في جدول sent_messages
+        DB::table('sent_messages')->insert([
+            'id' => Str::uuid(),
+            'message' => $message,
+            'message_ar' => $translatedMessageAr,
+            'message_en' => $translatedMessageEn,
+            'message_fr' => $translatedMessageFr,
+            'message_de' => $translatedMessageDe,
+            'notification_date' => $notificationDate,
+            'is_for_all' => $isForAll, // تحديد إذا كانت الرسالة موجهة للجميع
+            'user_id' => $isForAll ? null : $userId, // تخزين معرف المستخدم إذا لم تكن الرسالة للجميع
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        return redirect()->back()->with('success', 'Notification sent successfully!');
+    }
+
 
 
         private function translateMessage($message, $locale)

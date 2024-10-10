@@ -38,7 +38,7 @@ return new class extends Migration
             // مفاتيح خارجية للجداول المرتبطة
             $table->unsignedBigInteger('zodiac_sign_id')->nullable();
             $table->unsignedBigInteger('other_interest_id')->nullable();
-            $table->unsignedBigInteger('language_id')->nullable();
+            $table->unsignedBigInteger('language_id')->default(2);
             $table->unsignedBigInteger('hobbie_id')->nullable();
             $table->unsignedBigInteger('favorite_music_id')->nullable();
             $table->unsignedBigInteger('favorite_color_id')->nullable();

@@ -23,6 +23,7 @@ Route::middleware(['web', 'isAdmin'])->group(function(){
     Route::get('/dashbord/send',[adminControler::class,'send'])->name('dashbord.send');
     Route::post('/notifications/send', [NotificationController::class, 'sendToAllUsers'])->name('notifications.send');
 
+    Route::get('/dashbord/messages_send',[adminControler::class,'messages_send'])->name('dashbord.Users_messages');
 
     Route::get('/users', [adminControler::class, 'showUsers'])->name('users.index');
 

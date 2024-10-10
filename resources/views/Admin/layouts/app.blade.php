@@ -62,6 +62,10 @@
                             <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                             Users Statistics
                         </a>
+                        <a class="nav-link" href="{{ route('admin.dashbord.Users_messages') }}">
+                            <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                            Messages Is Send
+                        </a>
                         <div class="sb-sidenav-menu-heading">Users managment</div>
                         <a class="nav-link" href="{{ route('admin.users.index') }}">
                             <div class="sb-nav-link-icon"><i class="fas fa-users"></i></div>

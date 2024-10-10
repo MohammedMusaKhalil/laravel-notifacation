@@ -8,12 +8,19 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use LaravelDaily\LaravelCharts\Classes\LaravelChart;
 use Carbon\Carbon;
-
+use Illuminate\Support\Facades\DB;
 
 class adminControler extends Controller
 {
 
+    public function messages_send()
+{
+    // استرجاع جميع الرسائل المرسلة من جدول sent_messages
+    $sentMessages = DB::table('sent_messages')->get();
 
+    // تمرير الرسائل إلى العرض
+    return view('Admin.dashbord.message_send', compact('sentMessages'));
+}
     public function User_statistics()
     {
         // Blocks showing user login statistics
