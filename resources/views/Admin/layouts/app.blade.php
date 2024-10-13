@@ -81,11 +81,11 @@
                         </a>
                         <a class="nav-link" href="{{ route('admin.users.email') }}">
                             <div class="sb-nav-link-icon"><i class="fas fa-users"></i></div>
-                            Email Unverified Users
+                            Email verified Users
                         </a>
                         <a class="nav-link" href="{{ route('admin.users.phone') }}">
                             <div class="sb-nav-link-icon"><i class="fas fa-users"></i></div>
-                            Phone Unverified Users
+                            Phone verified Users
                         </a>
                         <a class="nav-link" href="{{ route('admin.dashbord.send') }}">
                             <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>

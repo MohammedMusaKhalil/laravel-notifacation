@@ -13,14 +13,25 @@ use Illuminate\Support\Facades\DB;
 class adminControler extends Controller
 {
 
-    public function messages_send()
+    public function messages_send(Request $request)
 {
-    // استرجاع جميع الرسائل المرسلة من جدول sent_messages
-    $sentMessages = DB::table('sent_messages')->get();
+    // استرجاع التاريخ المختار من الطلب
+    $date = $request->input('date');
+
+    // إذا تم اختيار تاريخ، نعرض الرسائل المتعلقة بالتاريخ المختار
+    if ($date) {
+        $sentMessages = DB::table('sent_messages')
+            ->whereDate('notification_date', $date)
+            ->get();
+    } else {
+        // إذا لم يتم اختيار تاريخ، نعرض جميع الرسائل
+        $sentMessages = DB::table('sent_messages')->get();
+    }
 
     // تمرير الرسائل إلى العرض
     return view('Admin.dashbord.message_send', compact('sentMessages'));
 }
+
     public function User_statistics()
     {
         // Blocks showing user login statistics

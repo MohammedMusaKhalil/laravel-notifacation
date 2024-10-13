@@ -25,6 +25,7 @@ Route::middleware(['web', 'isAdmin'])->group(function(){
 
     Route::get('/dashbord/messages_send',[adminControler::class,'messages_send'])->name('dashbord.Users_messages');
 
+
     Route::get('/users', [adminControler::class, 'showUsers'])->name('users.index');
 
     Route::get('/user_statistics', [adminControler::class, 'User_statistics'])->name('dashbord.User_statistics');

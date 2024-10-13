@@ -44,7 +44,7 @@
                         <i class="fas fa-envelope fa-2x m-2"></i>
                         <span class="ml-3 display-6">{{ $usersWithEmail }}</span>
                         <div class="display-7">
-                            Email Unverified Users
+                            Email verified Users
                         </div>
                     </div>
                     <div class="card-footer d-flex align-items-center justify-content-between">
@@ -60,7 +60,7 @@
                         <i class="fas fa-phone fa-2x m-2"></i>
                         <span class="ml-3 display-6">{{ $usersWithPhone }}</span>
                         <div class="display-7">
-                            Phone Unverified Users
+                            Phone verified Users
                         </div>
                     </div>
                     <div class="card-footer d-flex align-items-center justify-content-between">

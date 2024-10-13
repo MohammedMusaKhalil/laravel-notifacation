@@ -108,6 +108,9 @@ class User extends Authenticatable
     {
         return $this->hasOne(Usernotification::class, 'userId');
     }
+
+
+
     protected static function booted()
 {
     static::created(function ($user) {

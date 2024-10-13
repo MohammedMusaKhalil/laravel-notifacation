@@ -5,12 +5,12 @@
     <div class="container-fluid px-4">
         <h1 class="mt-4">Dashboard</h1>
         <ol class="breadcrumb mb-4">
-            <li class="breadcrumb-item active">Users Management / Phone Unverified Users</li>
+            <li class="breadcrumb-item active">Users Management / Phone verified Users</li>
         </ol>
         <div class="card mb-4">
             <div class="card-header">
                 <i class="fas fa-users me-1"></i>
-                Users List Phone Unverified
+                Users List Phone verified
             </div>
             <div class="card-body">
                 @if($users->isEmpty())
@@ -46,5 +46,5 @@
 @endsection
 
 @section('title')
-Dashboard - Phone Unverified Users
+Dashboard - Phone verified Users
 @endsection

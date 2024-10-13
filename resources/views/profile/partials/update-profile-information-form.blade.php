@@ -73,7 +73,7 @@
             <x-input-error class="mt-2" :messages="$errors->get('zodiac_sign_id')" />
         </div>
 
-        <div>
+        {{-- <div>
             <x-input-label for="hobbie_id" :value="__('Hobbies')" />
             <select id="hobbie_id" name="hobbie_id" class="mt-1 block w-full">
                 @foreach($hobbies as $hobby)
@@ -81,9 +81,9 @@
                 @endforeach
             </select>
             <x-input-error class="mt-2" :messages="$errors->get('zodiac_sign_id')" />
-        </div>
+        </div> --}}
 
-        <div>
+        {{-- <div>
             <x-input-label for="favorite_color_id" :value="__('Favorite Colors')" />
             <select id="favorite_color_id" name="favorite_color_id" class="mt-1 block w-full">
                 @foreach($favorite_colors as $favorite_color)
@@ -91,9 +91,9 @@
                 @endforeach
             </select>
             <x-input-error class="mt-2" :messages="$errors->get('zodiac_sign_id')" />
-        </div>
+        </div> --}}
 
-        <div>
+        {{-- <div>
             <x-input-label for="favorite_book_id" :value="__('Favorite Books')" />
             <select id="favorite_book_id" name="favorite_book_id" class="mt-1 block w-full">
                 @foreach($favorite_books as $favorite_book)
@@ -101,9 +101,9 @@
                 @endforeach
             </select>
             <x-input-error class="mt-2" :messages="$errors->get('zodiac_sign_id')" />
-        </div>
+        </div> --}}
 
-        <div>
+        {{-- <div>
             <x-input-label for="favorite_music_id" :value="__('Favorite Music')" />
             <select id="favorite_music_id" name="favorite_music_id" class="mt-1 block w-full">
                 @foreach($favorite_music as $music)
@@ -111,7 +111,7 @@
                 @endforeach
             </select>
             <x-input-error class="mt-2" :messages="$errors->get('zodiac_sign_id')" />
-        </div>
+        </div> --}}
         <div>
             <x-input-label for="language_id" :value="__('Language')" />
             <select id="language_id" name="language_id" class="mt-1 block w-full">
@@ -123,7 +123,7 @@
             </select>
             <x-input-error class="mt-2" :messages="$errors->get('language_id')" />
         </div>
-        <div>
+        {{-- <div>
             <x-input-label for="other_interest_id" :value="__('Other Interests')" />
             <select id="other_interest_id" name="other_interest_id" class="mt-1 block w-full" >
                 @foreach($other_interests as $other_interest)
@@ -131,6 +131,65 @@
                 @endforeach
             </select>
             <x-input-error class="mt-2" :messages="$errors->get('other_interest_id')" />
+        </div> --}}
+        <div>
+            <x-input-label for="hobbies" :value="__('Hobbies')" />
+            @foreach($hobbies as $hobby)
+                <div>
+                    <input type="checkbox" id="hobby_{{ $hobby->id }}" name="hobbies[]" value="{{ $hobby->id }}"
+                           {{ in_array($hobby->id, old('hobbies', $user->hobbies->pluck('id')->toArray())) ? 'checked' : '' }}>
+                    <label for="hobby_{{ $hobby->id }}">{{ $hobby->hobby_name }}</label>
+                </div>
+            @endforeach
+            <x-input-error class="mt-2" :messages="$errors->get('hobbies')" />
+        </div>
+
+        <div>
+            <x-input-label for="favorite_colors" :value="__('Favorite Colors')" />
+            @foreach($favorite_colors as $color)
+                <div>
+                    <input type="checkbox" id="color_{{ $color->id }}" name="favorite_colors[]" value="{{ $color->id }}"
+                           {{ in_array($color->id, old('favorite_colors', $user->favoriteColors->pluck('id')->toArray())) ? 'checked' : '' }}>
+                    <label for="color_{{ $color->id }}">{{ $color->color_name }}</label>
+                </div>
+            @endforeach
+            <x-input-error class="mt-2" :messages="$errors->get('favorite_colors')" />
+        </div>
+
+        <div>
+            <x-input-label for="favorite_books" :value="__('Favorite Books')" />
+            @foreach($favorite_books as $book)
+                <div>
+                    <input type="checkbox" id="book_{{ $book->id }}" name="favorite_books[]" value="{{ $book->id }}"
+                           {{ in_array($book->id, old('favorite_books', $user->favoriteBooks->pluck('id')->toArray())) ? 'checked' : '' }}>
+                    <label for="book_{{ $book->id }}">{{ $book->book_name }}</label>
+                </div>
+            @endforeach
+            <x-input-error class="mt-2" :messages="$errors->get('favorite_books')" />
+        </div>
+
+        <div>
+            <x-input-label for="favorite_music" :value="__('Favorite Music')" />
+            @foreach($favorite_music as $music)
+                <div>
+                    <input type="checkbox" id="music_{{ $music->id }}" name="favorite_music[]" value="{{ $music->id }}"
+                           {{ in_array($music->id, old('favorite_music', $user->favoriteMusic->pluck('id')->toArray())) ? 'checked' : '' }}>
+                    <label for="music_{{ $music->id }}">{{ $music->music_genre }}</label>
+                </div>
+            @endforeach
+            <x-input-error class="mt-2" :messages="$errors->get('favorite_music')" />
+        </div>
+
+        <div>
+            <x-input-label for="other_interests" :value="__('Other Interests')" />
+            @foreach($other_interests as $interest)
+                <div>
+                    <input type="checkbox" id="interest_{{ $interest->id }}" name="other_interests[]" value="{{ $interest->id }}"
+                           {{ in_array($interest->id, old('other_interests', $user->otherInterests->pluck('id')->toArray())) ? 'checked' : '' }}>
+                    <label for="interest_{{ $interest->id }}">{{ $interest->interest_name }}</label>
+                </div>
+            @endforeach
+            <x-input-error class="mt-2" :messages="$errors->get('other_interests')" />
         </div>
 
         <div class="flex items-center gap-4">

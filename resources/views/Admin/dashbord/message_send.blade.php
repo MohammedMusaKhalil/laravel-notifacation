@@ -14,6 +14,19 @@
                 Messages Sent to Users
             </div>
             <div class="card-body">
+                <!-- Form for selecting date -->
+                <form method="GET" action="{{ route('admin.dashbord.Users_messages') }}">
+                    <div class="row mb-4">
+                        <div class="col-md-4">
+                            <label for="date">Select Date:</label>
+                            <input type="date" id="date" name="date" class="form-control" value="{{ request('date') }}">
+                        </div>
+                        <div class="col-md-2 align-self-end">
+                            <button type="submit" class="btn btn-primary">Filter</button>
+                        </div>
+                    </div>
+                </form>
+
                 <table class="table table-bordered">
                     <thead>
                         <tr>

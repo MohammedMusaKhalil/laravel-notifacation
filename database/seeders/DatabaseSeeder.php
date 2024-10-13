@@ -28,7 +28,7 @@ class DatabaseSeeder extends Seeder
                 'last_name' => $faker->lastName,
                 'email' => $faker->unique()->safeEmail,
                 'password' => bcrypt('password'), // كلمة مرور افتراضية
-                'last_login_at' => Arr::random([now()->subDays(rand(1,30)), null]),
+                'last_login_at' => Arr::random([now()->subDays(rand(1,36))]),
             ]);
         }
 
@@ -37,19 +37,21 @@ class DatabaseSeeder extends Seeder
             'email' => 'mm@gmail.com',
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
 
+
         ]);
         \App\Models\User::create([
             'first_name' => 'sami',
             'last_name' => 'sami',
             'email' => 'sami@gmail.com',
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
-
+            'last_login_at' => Arr::random([now()->subDays(rand(1,36))]),
         ]);
         \App\Models\User::create([
             'first_name' => 'rami',
             'last_name' => 'rami',
             'email' => 'rami@gmail.com',
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+            'last_login_at' => Arr::random([now()->subDays(rand(1,36))]),
 
         ]);
 
