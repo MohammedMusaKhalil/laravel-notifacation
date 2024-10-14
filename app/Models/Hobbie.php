@@ -13,4 +13,8 @@ class Hobbie extends Model
         'id', // إضافة الحقل id هنا
 
     ];
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 'hobby_user', 'hobby_id', 'user_id');
+    }
 }

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminAdviceController;
 use App\Http\Controllers\adminControler;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ProfileController;
@@ -25,6 +26,13 @@ Route::middleware(['web', 'isAdmin'])->group(function(){
 
     Route::get('/dashbord/messages_send',[adminControler::class,'messages_send'])->name('dashbord.Users_messages');
 
+
+    Route::get('/daily-tips', [AdminAdviceController::class, 'index'])->name('dashbord.daily.tips');
+    Route::get('/tips/create', [AdminAdviceController::class, 'create'])->name('dashbord.tips.create');  // صفحة إنشاء نصيحة جديدة
+    Route::post('/tips', [AdminAdviceController::class, 'store'])->name('dashbord.tips.store');  // تخزين النصيحة
+    Route::get('/tips/{advice}/edit', [AdminAdviceController::class, 'edit'])->name('dashbord.tips.edit');  // صفحة تعديل النصيحة
+    Route::put('/tips/{advice}', [AdminAdviceController::class, 'update'])->name('dashbord.tips.update');  // تحديث النصيحة
+    Route::delete('/tips/{advice}', [AdminAdviceController::class, 'destroy'])->name('dashbord.tips.destroy');  // حذف النصيحة
 
     Route::get('/users', [adminControler::class, 'showUsers'])->name('users.index');
 

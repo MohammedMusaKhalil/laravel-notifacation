@@ -71,15 +71,15 @@ class ProfileController extends Controller
     $user->gender = $request->input('gender');
     $user->personality = $request->input('personality');
     $user->zodiac_sign_id = $request->input('zodiac_sign_id');
-    $user->hobbie_id=$request->input('hobbie_id');
-   $user->favorite_music_id=$request->input('favorite_music_id');
-   $user->favorite_color_id=$request->input('favorite_color_id');
-   $user->favorite_book_id=$request->input('favorite_book_id');
-   $user->other_interest_id=$request->input('other_interest_id');
+
    $user->language_id=$request->input('language_id');
     // حفظ معلومات المستخدم
     $user->save();
-
+    $user->hobbies()->sync($request->input('hobbies', []));
+    $user->favoriteBooks()->sync($request->input('favorite_books', []));
+    $user->favoriteColors()->sync($request->input('favorite_colors', []));
+    $user->favoriteMusic()->sync($request->input('favorite_music', []));
+    $user->otherInterests()->sync($request->input('other_interests', []));
     return Redirect::route('profile.edit');
 }
 

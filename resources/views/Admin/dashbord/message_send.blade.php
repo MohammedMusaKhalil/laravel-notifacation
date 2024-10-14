@@ -7,7 +7,19 @@
         <ol class="breadcrumb mb-4">
             <li class="breadcrumb-item active">Dashboard / Messages Sent</li>
         </ol>
-
+        <div class="row">
+            @foreach ($number_blocks as $block)
+            <div class="col-xl-3 col-md-6">
+                <div class="card bg-primary text-white mb-4">
+                    <div class="card-body">
+                        <i class="fas fa-lightbulb fa-2x m-2"></i>
+                        <span class="ml-3 display-6">{{ $block['number'] }}</span>
+                        <div class="display-7">{{ $block['title'] }}</div>
+                    </div>
+                </div>
+            </div>
+            @endforeach
+        </div>
         <div class="card mb-4">
             <div class="card-header">
                 <i class="fas fa-envelope me-1"></i>

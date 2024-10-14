@@ -3,6 +3,8 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+
+use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Faker\Factory as Faker;
@@ -402,5 +404,31 @@ class DatabaseSeeder extends Seeder
                 'updated_at' => now(),
             ],
         ]);
+
+        $adviceTypes = [
+            ['name' => 'Daily Advice'],
+            ['name' => 'Financial Advice'],
+            ['name' => 'Health Advice'],
+            ['name' => 'Marriage Advice'],
+            ['name' => 'Advice for Girls'],
+        ];
+
+        DB::table('advicetypes')->insert($adviceTypes);
+
+
+        $dates = [];
+
+        // إنشاء تواريخ شهر أكتوبر 2024
+        for ($day = 1; $day <= 31; $day++) {
+            $date = Carbon::create(2024, 10, $day);
+            $dates[] = [
+                'date' => $date->toDateString(),  // تاريخ اليوم
+                'created_at' => now(),            // وقت الإنشاء
+                'updated_at' => now()             // وقت آخر تحديث
+            ];
+        }
+
+        // إدخال التواريخ في جدول dailies
+        DB::table('dailies')->insert($dates);
     }
 }

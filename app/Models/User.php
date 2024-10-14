@@ -69,11 +69,11 @@ class User extends Authenticatable
         return $this->hasOne(Zodiacsign::class, 'id', 'zodiac_sign_id');
     }
 
-    // علاقة مع Other_interest
-    public function otherInterests()
-    {
-        return $this->hasOne(Other_interest::class, 'id', 'other_interest_id');
-    }
+    // // علاقة مع Other_interest
+    // public function otherInterests()
+    // {
+    //     return $this->hasOne(Other_interest::class, 'id', 'other_interest_id');
+    // }
 
     // علاقة مع Language
     public function language()
@@ -81,35 +81,55 @@ class User extends Authenticatable
         return $this->hasOne(Language::class, 'id', 'language_id');
     }
 
-    // علاقة مع Hobbie
-    public function hobbies()
-    {
-        return $this->hasOne(Hobbie::class, 'id', 'hobbie_id');
-    }
+    // // علاقة مع Hobbie
+    // public function hobbies()
+    // {
+    //     return $this->hasOne(Hobbie::class, 'id', 'hobbie_id');
+    // }
 
-    // علاقة مع Favorite_music
-    public function favoriteMusic()
-    {
-        return $this->hasOne(Favorite_music::class, 'id', 'favorite_music_id');
-    }
+    // // علاقة مع Favorite_music
+    // public function favoriteMusic()
+    // {
+    //     return $this->hasOne(Favorite_music::class, 'id', 'favorite_music_id');
+    // }
 
     // علاقة مع Favorite_color
-    public function favoriteColors()
-    {
-        return $this->hasOne(Favorite_color::class, 'id', 'favorite_color_id');
-    }
+    // public function favoriteColors()
+    // {
+    //     return $this->hasOne(Favorite_color::class, 'id', 'favorite_color_id');
+    // }
 
     // علاقة مع Favorite_book
-    public function favoriteBooks()
-    {
-        return $this->hasOne(Favorite_book::class, 'id', 'favorite_book_id');
-    }
+    // public function favoriteBooks()
+    // {
+    //     return $this->hasOne(Favorite_book::class, 'id', 'favorite_book_id');
+    // }
     public function usernotification()
     {
         return $this->hasOne(Usernotification::class, 'userId');
     }
 
+    public function favoriteMusic()
+    {
+        return $this->belongsToMany(Favorite_music::class, 'favorite_music_user');
+    }
+    public function hobbies()
+{
+    return $this->belongsToMany(Hobbie::class, 'hobby_user', 'user_id', 'hobby_id'); // Ensure this matches your database schema
+}
 
+    public function favoriteColors()
+    {
+        return $this->belongsToMany(Favorite_color::class, 'favorite_color_user');
+    }
+    public function favoriteBooks()
+    {
+        return $this->belongsToMany(Favorite_book::class, 'favorite_book_user');
+    }
+    public function otherInterests()
+    {
+        return $this->belongsToMany(Other_interest::class, 'other_interest_user');
+    }
 
     protected static function booted()
 {

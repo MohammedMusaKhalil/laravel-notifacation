@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Notifications') }}
+            {{ __('Notifications & Daily Advice') }}
         </h2>
     </x-slot>
 
@@ -12,12 +12,30 @@
             <div id="notifications-list">
                 <!-- سيتم تحديث الإشعارات هنا -->
             </div>
+
+            <h3 class="text-2xl font-semibold text-gray-700 mb-4 mt-8">Your Daily Advice</h3>
+
+            <div id="daily-advice-list">
+                <!-- سيتم عرض النصائح هنا -->
+                @if(isset($translatedAdvice) && count($translatedAdvice) > 0)
+                    @foreach($translatedAdvice as $advice)
+                        <div class="advice bg-blue-100 border-l-4 border-blue-500 shadow-sm rounded-lg mb-6 p-5">
+                            <p class="text-gray-800">{{ $advice['translated_advice'] }}</p>
+                            <small class="text-gray-500">{{ $advice['date'] }}</small>
+                        </div>
+                    @endforeach
+                @else
+                    <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded-lg" role="alert">
+                        <p>No daily advice available.</p>
+                    </div>
+                @endif
+            </div>
         </div>
     </div>
 
     <script>
-         // تحديد المنطقة الزمنية للمستخدم من المتصفح
-         var timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+        // تحديد المنطقة الزمنية للمستخدم من المتصفح
+        var timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
         // إرسال المنطقة الزمنية إلى الخادم عبر AJAX
         fetch('{{ route('set.timezone') }}', {
@@ -33,6 +51,7 @@
         }).catch(error => {
             console.error('Error setting timezone:', error);
         });
+
         // استدعاء الإشعارات من خلال الـ API وتحديث قائمة الإشعارات
         function fetchNotifications() {
             fetch('/api/notifications')

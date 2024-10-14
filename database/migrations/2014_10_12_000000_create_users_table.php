@@ -35,14 +35,9 @@ return new class extends Migration
             $table->string('google_id')->nullable();
             $table->string('google_token')->nullable();
             $table->string('google_refresh_token')->nullable();
-            // مفاتيح خارجية للجداول المرتبطة
+            // مفاتيح خارجية للجداول المرتبطة (يمكن حذفها إذا كنت تستخدم جداول الربط)
             $table->unsignedBigInteger('zodiac_sign_id')->nullable();
-            $table->unsignedBigInteger('other_interest_id')->nullable();
             $table->unsignedBigInteger('language_id')->default(2);
-            $table->unsignedBigInteger('hobbie_id')->nullable();
-            $table->unsignedBigInteger('favorite_music_id')->nullable();
-            $table->unsignedBigInteger('favorite_color_id')->nullable();
-            $table->unsignedBigInteger('favorite_book_id')->nullable();
 
             $table->timestamps();
         });

@@ -12,4 +12,8 @@ class Favorite_book extends Model
         'id', // إضافة الحقل id هنا
 
     ];
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 'favorite_book_user');
+    }
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
 use App\Models\Admin;
+use App\Models\Advice;
 use App\Models\User;
 use Illuminate\Http\Request;
 use LaravelDaily\LaravelCharts\Classes\LaravelChart;
@@ -27,9 +28,12 @@ class adminControler extends Controller
         // إذا لم يتم اختيار تاريخ، نعرض جميع الرسائل
         $sentMessages = DB::table('sent_messages')->get();
     }
-
+    $number_blocks = [
+        ['number' => $sentMessages->count(), 'title' => 'Total Messages'],
+        // يمكن إضافة بلوكات أخرى هنا حسب الحاجة
+    ];
     // تمرير الرسائل إلى العرض
-    return view('Admin.dashbord.message_send', compact('sentMessages'));
+    return view('Admin.dashbord.message_send', compact('sentMessages','number_blocks'));
 }
 
     public function User_statistics()

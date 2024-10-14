@@ -13,15 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('advice', function (Blueprint $table) {
+        Schema::create('favorite_book_user', function (Blueprint $table) {
             $table->id();
-            $table->string('advices');
-            $table->unsignedBigInteger('id_daily')->nullable();
-            $table->unsignedBigInteger('language_id')->nullable();
-            $table->unsignedBigInteger('zodiac_sign_id')->nullable();
-            $table->unsignedBigInteger('advicetype_id')->nullable();
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->foreignId('favorite_book_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
+
     }
 
     /**
@@ -31,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('advice');
+        Schema::dropIfExists('favorite_book_user');
     }
 };

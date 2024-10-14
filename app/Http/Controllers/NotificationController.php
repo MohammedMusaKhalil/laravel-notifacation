@@ -72,9 +72,108 @@ class NotificationController extends Controller
                     ->get();
             }
         }
-    }
+                $userZodiacSignId = $user->zodiac_sign_id;
+                $dailyAdvice=null;
+                if($user->usernotification->enableDailyTips){
+                                $dailyAdvice = DB::table('advice')
+                                    ->join('dailies', 'advice.id_daily', '=', 'dailies.id')
+                                    ->where('advice.zodiac_sign_id', $userZodiacSignId)
+                                    ->where('advice.advicetype_id',1)
+                                    ->whereDate('dailies.date', Carbon::today($userTimezone))
+                                    ->select(
+                                        'advice.id',
+                                        'advice.created_at',
+                                        'dailies.date',
+                                        'advice.language_id', // جلب معرف اللغة
+                                        'advice.advices' // جلب النصيحة
+                                    )
+                                    ->get();
+                }
+                if($user->usernotification->enableFinancialTips){
+                    $FinancialTips = DB::table('advice')
+                    ->join('dailies', 'advice.id_daily', '=', 'dailies.id')
+                    ->where('advice.zodiac_sign_id', $userZodiacSignId)
+                    ->where('advice.advicetype_id', 2) // نصائح مالية
+                    ->whereDate('dailies.date', Carbon::today($userTimezone))
+                    ->select(
+                        'advice.id',
+                        'advice.created_at',
+                        'dailies.date',
+                        'advice.language_id', // جلب معرف اللغة
+                        'advice.advices' // جلب النصيحة
+                    )
+                    ->get();
+                $dailyAdvice = $dailyAdvice->merge($FinancialTips);
+                }
+                if($user->usernotification->enableHealthTips){
+                    $HealthTips = DB::table('advice')
+                    ->join('dailies', 'advice.id_daily', '=', 'dailies.id')
+                    ->where('advice.zodiac_sign_id', $userZodiacSignId)
+                    ->where('advice.advicetype_id', 3) // نصائح صحية
+                    ->whereDate('dailies.date', Carbon::today($userTimezone))
+                    ->select(
+                        'advice.id',
+                        'advice.created_at',
+                        'dailies.date',
+                        'advice.language_id', // جلب معرف اللغة
+                        'advice.advices' // جلب النصيحة
+                    )
+                    ->get();
+                $dailyAdvice = $dailyAdvice->merge($HealthTips);
+                }
+                if($user->usernotification->enableMarriageTips){
+                    $MarriageTips = DB::table('advice')
+                    ->join('dailies', 'advice.id_daily', '=', 'dailies.id')
+                    ->where('advice.zodiac_sign_id', $userZodiacSignId)
+                    ->where('advice.advicetype_id', 4) // نصائح زواج
+                    ->whereDate('dailies.date', Carbon::today($userTimezone))
+                    ->select(
+                        'advice.id',
+                        'advice.created_at',
+                        'dailies.date',
+                        'advice.language_id', // جلب معرف اللغة
+                        'advice.advices' // جلب النصيحة
+                    )
+                    ->get();
+                $dailyAdvice = $dailyAdvice->merge($MarriageTips);
+                }
+                if($user->usernotification->enableGirlsTips){
+                    $GirlsTips = DB::table('advice')
+                    ->join('dailies', 'advice.id_daily', '=', 'dailies.id')
+                    ->where('advice.zodiac_sign_id', $userZodiacSignId)
+                    ->where('advice.advicetype_id', 5) // نصائح بنات
+                    ->whereDate('dailies.date', Carbon::today($userTimezone))
+                    ->select(
+                        'advice.id',
+                        'advice.created_at',
+                        'dailies.date',
+                        'advice.language_id', // جلب معرف اللغة
+                        'advice.advices' // جلب النصيحة
+                    )
+                    ->get();
+                $dailyAdvice = $dailyAdvice->merge($GirlsTips);
+                }
+                if (!$dailyAdvice) {
+                    $translatedAdvice = null;
+                }else{
 
-    return view('notificatin', compact('notifications')); // تمرير الإشعارات إلى العرض
+                 $translatedAdvice = $dailyAdvice->map(function($advice) use ($user) {
+                    return [
+                        'id' => $advice->id,
+                        'created_at' => $advice->created_at,
+                        'date' => $advice->date,
+                        'translated_advice' => $this->translateMessage($advice->advices, $user->language->code) // استدعاء دالة الترجمة
+                    ];
+                });}
+
+    }
+    else{
+    $translatedAdvice=null;
+}
+
+    // هنا نقوم بإرجاع النصائح المترجمة
+    return view('notificatin', compact('notifications', 'translatedAdvice'));
+
 }
 
 public function updateNotifications(Request $request)

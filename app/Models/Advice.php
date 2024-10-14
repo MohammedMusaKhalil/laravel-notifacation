@@ -8,6 +8,13 @@ use Illuminate\Database\Eloquent\Model;
 class Advice extends Model
 {
     use HasFactory;
+    protected $fillable = [
+        'advices',
+        'id_daily',
+        'language_id',
+        'zodiac_sign_id',
+        'advicetype_id',
+    ];
 
 
     public function daily(){
