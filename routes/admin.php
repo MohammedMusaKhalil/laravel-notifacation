@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\AdminAdviceController;
 use App\Http\Controllers\adminControler;
+use App\Http\Controllers\AdminDailyHoroscopeController;
+use App\Http\Controllers\AdminWeeklyHoroscopeController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -25,6 +27,20 @@ Route::middleware(['web', 'isAdmin'])->group(function(){
     Route::post('/notifications/send', [NotificationController::class, 'sendToAllUsers'])->name('notifications.send');
 
     Route::get('/dashbord/messages_send',[adminControler::class,'messages_send'])->name('dashbord.Users_messages');
+
+    Route::get('/daily-horoscope', [AdminDailyHoroscopeController::class, 'index'])->name('daily.horoscope');
+    Route::get('/daily-horoscope/create', [AdminDailyHoroscopeController::class, 'create'])->name('daily.horoscope.create');
+    Route::post('/daily-horoscope', [AdminDailyHoroscopeController::class, 'store'])->name('daily.horoscope.store');
+    Route::get('/daily-horoscope/{id}/edit', [AdminDailyHoroscopeController::class, 'edit'])->name('daily.horoscope.edit');
+    Route::put('/daily-horoscope/{id}', [AdminDailyHoroscopeController::class, 'update'])->name('daily.horoscope.update');
+    Route::delete('/daily-horoscope/{id}', [AdminDailyHoroscopeController::class, 'destroy'])->name('daily.horoscope.destroy');
+
+    Route::get('/weekly-horoscope', [AdminWeeklyHoroscopeController::class, 'index'])->name('weekly.horoscope');
+    Route::get('/weekly-horoscope/create', [AdminWeeklyHoroscopeController::class, 'create'])->name('weekly.horoscope.create');
+    Route::post('/weekly-horoscope', [AdminWeeklyHoroscopeController::class, 'store'])->name('weekly.horoscope.store');
+    Route::get('/weekly-horoscope/{id}/edit', [AdminWeeklyHoroscopeController::class, 'edit'])->name('weekly.horoscope.edit');
+    Route::put('/weekly-horoscope/{id}', [AdminWeeklyHoroscopeController::class, 'update'])->name('weekly.horoscope.update');
+    Route::delete('/weekly-horoscope/{id}', [AdminWeeklyHoroscopeController::class, 'destroy'])->name('weekly.horoscope.destroy');
 
 
     Route::get('/daily-tips', [AdminAdviceController::class, 'index'])->name('dashbord.daily.tips');

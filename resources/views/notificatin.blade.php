@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Notifications & Daily Advice') }}
+            {{ __('Notifications & Advice') }}
         </h2>
     </x-slot>
 
@@ -13,7 +13,7 @@
                 <!-- سيتم تحديث الإشعارات هنا -->
             </div>
 
-            <h3 class="text-2xl font-semibold text-gray-700 mb-4 mt-8">Your Daily Advice</h3>
+            <h3 class="text-2xl font-semibold text-gray-700 mb-4 mt-8">Your  Advice</h3>
 
             <div id="daily-advice-list">
                 <!-- سيتم عرض النصائح هنا -->

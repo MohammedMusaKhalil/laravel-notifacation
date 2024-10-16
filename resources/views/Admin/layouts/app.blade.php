@@ -10,6 +10,10 @@
     <title>Admin Dashboard</title>
     <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/luxon@2.0.2/build/global/luxon.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-luxon@1.0.0"></script>
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link href="{{ asset('css/styles.css') }}" rel="stylesheet" />
 </head>
@@ -102,8 +106,12 @@
                         </a>
                         <div class="collapse" id="collapseHoroscope" aria-labelledby="headingHoroscope" data-bs-parent="#sidenavAccordion">
                             <nav class="sb-sidenav-menu-nested nav">
-                                <a class="nav-link" href="">Horoscope Overview</a>
-                                <a class="nav-link" href="">Horoscope Predictions</a>
+                                <a class="nav-link" href="{{ route('admin.daily.horoscope') }}">Daily Horoscope </a>
+                            </nav>
+                        </div>
+                        <div class="collapse" id="collapseHoroscope" aria-labelledby="headingHoroscope" data-bs-parent="#sidenavAccordion">
+                            <nav class="sb-sidenav-menu-nested nav">
+                                <a class="nav-link" href="{{ route('admin.weekly.horoscope') }}">Weekly Horoscope </a>
                             </nav>
                         </div>
 

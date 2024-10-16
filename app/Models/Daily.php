@@ -12,4 +12,6 @@ class Daily extends Model
         'id', // إضافة الحقل id هنا
 
     ];
+
+
 }

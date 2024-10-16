@@ -54,7 +54,7 @@
         </div>
         @endforeach
 
-    <div class="container">
+    <div class="col-md-12">
         <!-- Existing content for dashboard and number/list blocks -->
 
         <div class="card ">
@@ -63,7 +63,7 @@
                 Users Chart Last 30 days
             </div>
             <div class="card-body">
-                <canvas id="myAreaChart" width="100%" height="30"></canvas>
+                <canvas id="myAreaChart" width="80%" height="30"></canvas>
             </div>
         </div>
     </div>
@@ -78,9 +78,8 @@ Dashboard - User Statistics
 
 @section('scripts')
 <script>
-// Set new default font family and font color to mimic Bootstrap's default styling
-Chart.defaults.global.defaultFontFamily = '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
-Chart.defaults.global.defaultFontColor = '#292b2c';
+Chart.defaults.font.family = '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
+Chart.defaults.color = '#292b2c';
 
 // Area Chart Example
 var ctx = document.getElementById("myAreaChart");

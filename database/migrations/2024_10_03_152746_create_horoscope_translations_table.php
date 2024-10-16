@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('horoscope_translations', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('daily_id')->constrained('dailies')->onDelete('cascade');
             $table->foreignId('Zodiacsign_id')->constrained()->onDelete('cascade'); // علاقة مع جدول الابراج
             $table->foreignId('language_id')->constrained()->onDelete('cascade');   // علاقة مع جدول اللغات
             $table->text('generalPrediction');
