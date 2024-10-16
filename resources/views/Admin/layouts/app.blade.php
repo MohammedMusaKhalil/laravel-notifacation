@@ -114,6 +114,11 @@
                                 <a class="nav-link" href="{{ route('admin.weekly.horoscope') }}">Weekly Horoscope </a>
                             </nav>
                         </div>
+                        <div class="collapse" id="collapseHoroscope" aria-labelledby="headingHoroscope" data-bs-parent="#sidenavAccordion">
+                            <nav class="sb-sidenav-menu-nested nav">
+                                <a class="nav-link" href="{{ route('admin.monthly.horoscope') }}">Monthly Horoscope </a>
+                            </nav>
+                        </div>
 
                     </div>
                 </div>

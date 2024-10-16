@@ -2,14 +2,14 @@
 
 @section('content')
 <div class="container-fluid px-4">
-    <h1 class="mt-4">Edit Daily Horoscope</h1>
+    <h1 class="mt-4">Edit Monthly Horoscope</h1>
     <ol class="breadcrumb mb-4">
-        <li class="breadcrumb-item active">Horoscope Management / Edit Daily Horoscope</li>
+        <li class="breadcrumb-item active">Horoscope Management / Edit Monthly Horoscope</li>
     </ol>
 
     <div class="row">
         <div class="col-md-12">
-            <form action="{{ route('admin.daily.horoscope.update', $horoscope->id) }}" method="POST">
+            <form action="{{ route('admin.monthly.horoscope.update', $horoscope->id) }}" method="POST">
                 @csrf
                 @method('PUT')
                 <div class="mb-3">
@@ -17,16 +17,16 @@
                     <select name="zodiacsign_id" id="zodiacsign_id" class="form-control" required>
                         <option value="">Select Zodiac Sign</option>
                         @foreach ($zodiacSigns as $zodiac)
-                            <option value="{{ $zodiac->id }}" {{ $horoscope->Zodiacsign_id == $zodiac->id ? 'selected' : '' }}>{{ $zodiac->zodiacn }}</option>
+                            <option value="{{ $zodiac->id }}" {{ $horoscope->zodiacsign_id == $zodiac->id ? 'selected' : '' }}>{{ $zodiac->zodiacn }}</option>
                         @endforeach
                     </select>
                 </div>
                 <div class="mb-3">
-                    <label for="daily_id" class="form-label">Daily</label>
-                    <select name="daily_id" id="daily_id" class="form-control" required>
-                        <option value="">Select Daily</option>
-                        @foreach ($dailies as $daily)
-                            <option value="{{ $daily->id }}" {{ $horoscope->daily_id == $daily->id ? 'selected' : '' }} >{{ $daily->date }}</option> <!-- Adjust as necessary -->
+                    <label for="monthly_id" class="form-label">Monthly Date</label>
+                    <select name="monthly_id" id="monthly_id" class="form-control" required>
+                        <option value="">Select Monthly Date</option>
+                        @foreach ($monthlies as $monthly)
+                            <option value="{{ $monthly->id }}" {{ $horoscope->monthly_id == $monthly->id ? 'selected' : '' }} >{{ $monthly->monthly }}/{{ $monthly->year }}</option>
                         @endforeach
                     </select>
                 </div>
@@ -79,5 +79,5 @@
 @endsection
 
 @section('title')
-Edit Daily Horoscope
+Edit Monthly Horoscope
 @endsection

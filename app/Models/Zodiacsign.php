@@ -18,6 +18,12 @@ class Zodiacsign extends Model
         return $this->hasMany(WeeklyHoroscopeTranslation::class, 'zodiacsign_id');
     }
 
+    public function monthlyHoroscopeTranslations()
+    {
+        return $this->hasMany(MonthlyHoroscopeTranslation::class, 'zodiacsign_id');
+    }
+
+
     public function languages()
     {
         return $this->belongsToMany(Language::class, 'horoscope_translations')

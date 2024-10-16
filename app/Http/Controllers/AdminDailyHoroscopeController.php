@@ -52,7 +52,7 @@ public function store(Request $request)
 
     // Create a new HoroscopeTranslation with all the necessary fields
     HoroscopeTranslation::create([
-        'Zodiacsign_id' => $request->zodiac_sign_id,
+        'zodiacsign_id' => $request->zodiac_sign_id,
         'language_id' => $request->language_id,
         'daily_id' => $request->daily_id, // Add daily_id here
         'generalPrediction' => $request->generalPrediction,
@@ -80,9 +80,11 @@ public function edit($id)
 
 public function update(Request $request, $id)
 {
+
     $request->validate([
-        'Zodiacsign_id' => 'required|exists:zodiacsigns,id',
+        'zodiacsign_id' => 'required|exists:zodiacsigns,id',
         'language_id' => 'required|exists:languages,id',
+        'daily_id' => 'required|exists:dailies,id',// Add daily_id here
         'generalPrediction' => 'required|string',
         'lovePrediction' => 'required|string',
         'financialPrediction' => 'required|string',
@@ -94,7 +96,21 @@ public function update(Request $request, $id)
     ]);
 
     $horoscope = HoroscopeTranslation::findOrFail($id);
-    $horoscope->update($request->all());
+    $horoscope->zodiacsign_id = $request->zodiacsign_id;
+    $horoscope->language_id = $request->language_id;
+    $horoscope->daily_id = $request->daily_id;
+    $horoscope->generalPrediction = $request->generalPrediction;
+    $horoscope->lovePrediction = $request->lovePrediction;
+    $horoscope->financialPrediction = $request->financialPrediction;
+    $horoscope->healthPrediction = $request->healthPrediction;
+    $horoscope->Finanzial_per = $request->Finanzial_per;
+    $horoscope->health = $request->health;
+    $horoscope->loveLife = $request->loveLife;
+    $horoscope->occupat_per = $request->occupat_per;
+    //$horoscope->update($request->all());
+
+    $horoscope->save();
+
     return redirect()->route('admin.daily.horoscope')->with('success', 'Daily Horoscope updated successfully!');
 }
 public function destroy($id)

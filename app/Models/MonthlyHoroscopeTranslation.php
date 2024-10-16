@@ -1,17 +1,17 @@
 <?php
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class HoroscopeTranslation extends Model
+class MonthlyHoroscopeTranslation extends Model
 {
     use HasFactory;
-
     protected $fillable = [
         'zodiacsign_id',
         'language_id',
-        'daily_id',
+        'monthly_id',
         'generalPrediction',
         'lovePrediction',
         'financialPrediction',
@@ -24,13 +24,13 @@ class HoroscopeTranslation extends Model
 
     public function zodiacsign()
     {
-        return $this->belongsTo(ZodiacSign::class, 'Zodiacsign_id');
+        return $this->belongsTo(ZodiacSign::class, 'zodiacsign_id');
     }
 
     // Define the relationship to Daily
-    public function daily()
+    public function monthly()
     {
-        return $this->belongsTo(Daily::class, 'daily_id');
+        return $this->belongsTo(Monthly::class, 'monthly_id');
     }
 
     // Define the relationship to Language

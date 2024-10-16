@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdminAdviceController;
 use App\Http\Controllers\adminControler;
 use App\Http\Controllers\AdminDailyHoroscopeController;
+use App\Http\Controllers\AdminMonthlyHoroscopeController;
 use App\Http\Controllers\AdminWeeklyHoroscopeController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ProfileController;
@@ -41,6 +42,14 @@ Route::middleware(['web', 'isAdmin'])->group(function(){
     Route::get('/weekly-horoscope/{id}/edit', [AdminWeeklyHoroscopeController::class, 'edit'])->name('weekly.horoscope.edit');
     Route::put('/weekly-horoscope/{id}', [AdminWeeklyHoroscopeController::class, 'update'])->name('weekly.horoscope.update');
     Route::delete('/weekly-horoscope/{id}', [AdminWeeklyHoroscopeController::class, 'destroy'])->name('weekly.horoscope.destroy');
+
+
+    Route::get('/monthly-horoscope', [AdminMonthlyHoroscopeController::class, 'index'])->name('monthly.horoscope');
+    Route::get('/monthly-horoscope/create', [AdminMonthlyHoroscopeController::class, 'create'])->name('monthly.horoscope.create');
+    Route::post('/monthly-horoscope', [AdminMonthlyHoroscopeController::class, 'store'])->name('monthly.horoscope.store');
+    Route::get('/monthly-horoscope/{id}/edit', [AdminMonthlyHoroscopeController::class, 'edit'])->name('monthly.horoscope.edit');
+    Route::put('/monthly-horoscope/{id}', [AdminMonthlyHoroscopeController::class, 'update'])->name('monthly.horoscope.update');
+    Route::delete('/monthly-horoscope/{id}', [AdminMonthlyHoroscopeController::class, 'destroy'])->name('monthly.horoscope.destroy');
 
 
     Route::get('/daily-tips', [AdminAdviceController::class, 'index'])->name('dashbord.daily.tips');
